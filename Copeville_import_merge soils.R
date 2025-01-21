@@ -59,11 +59,7 @@ Base_soil_N_water <- read_excel(paste0(path_name, file), sheet = "2.Baseline N +
 Soil_water <- read_excel(paste0(path_name, file), sheet = "2.soil water tidy long" , col_types = "text" )
 
 
-## plant data at a PLOT level
-plant <- read_excel(paste0(path_name, file), sheet = "3.plant measure tidy long" )
-plant_est_NDVI <- read_excel(paste0(path_name, file), sheet = "3.Plants Est and NDVI tidy long" )
-plant_count <- read_excel(paste0(path_name, file), sheet = "3.Plant counts tidy long" )
-Yield <- read_excel(paste0(path_name, file), sheet = "4.yield tidy long" )
+
 
 
 # merge the soil  worksheet -------------------------------------------------------
