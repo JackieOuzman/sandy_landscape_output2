@@ -1,4 +1,4 @@
-# This file is for importing plant data and merge into one file. soil data
+# This file is for importing plant data and merge into one file.
 library(tidyverse)
 library(dplyr)
 library(readr)
