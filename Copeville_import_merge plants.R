@@ -45,7 +45,7 @@ excel_sheets(paste0(path_name, file))
 # "3.plant measure tidy long"      
 # "3.Plants Est SUBPLOT tidy long" 
 # "3.Plants Est and NDVI tidy long"
-# "3.Plant counts tidy long"       
+# "3.Plant counts tidy long"       ### This looks like duplicated data I won't import 
 # "4.yield tidy long"  
 # "growth_stages"
 # "Copeville 2024"   
@@ -59,7 +59,7 @@ excel_sheets(paste0(path_name, file))
 ## plant data at a PLOT level
 plant <- read_excel(paste0(path_name, file), sheet = "3.plant measure tidy long" , col_types = "text" )
 plant_est_NDVI <- read_excel(paste0(path_name, file), sheet = "3.Plants Est and NDVI tidy long" , col_types = "text" )
-plant_count <- read_excel(paste0(path_name, file), sheet = "3.Plant counts tidy long" , col_types = "text" )
+#plant_count <- read_excel(paste0(path_name, file), sheet = "3.Plant counts tidy long" , col_types = "text" )
 Yield <- read_excel(paste0(path_name, file), sheet = "4.yield tidy long" , col_types = "text" )
 
 plant_stages <- read_excel(paste0(path_name, file), sheet = "growth_stages" , 
@@ -77,8 +77,11 @@ dim(plant_est_NDVI) #18
 plant_bind_rows1 <- bind_rows(plant, plant_est_NDVI)
 
 # merge the plant  worksheet 3 -------------------------------------------------------
-dim(plant_count) #17
-plant_bind_rows <- bind_rows(plant_bind_rows1, plant_count)
+# I think this is duplicated so I won't import it
+# dim(plant_count) #17
+# plant_bind_rows <- bind_rows(plant_bind_rows1, plant_count)
+
+plant_bind_rows <- plant_bind_rows1
 
 # merge the plant  worksheet 4 -------------------------------------------------------
 dim(Yield) #17
@@ -93,16 +96,14 @@ plant_bind_rows_end <- plant_bind_rows_end %>% select(
   Short_ID,
   depth,
   variable,
-  value
+  value,
+  source
 )
 
 
-# assign sampling dates to plant satge and vice versa
+# assign sampling dates to plant stage and vice versa
 
-list_of_sampling_dates <- plant_bind_rows_end %>% distinct(date)
-list_of_sampling_dates <- list_of_sampling_dates %>%  arrange()
-plant_stages
-list_of_sampling_dates
+
 
 #convert to number first or date
 list_of_sampling_dates$date <- as.numeric(list_of_sampling_dates$date)
@@ -110,7 +111,11 @@ plant_stages$`start date` <- as.numeric(plant_stages$`start date`)
 plant_stages$`end date` <- as.numeric(plant_stages$`end date`) 
 plant_stages
 
-temp <- list_of_sampling_dates %>% mutate(
+
+plant_bind_rows_end$date <- as.numeric(plant_bind_rows_end$date)
+
+
+plant_bind_rows_end <- plant_bind_rows_end %>% mutate(
   After_Phenology_stage = case_when(
     date <  45440 ~ "PreSowing",
     between(date, 45440, 45444) ~ "After.Sowing",
@@ -129,10 +134,8 @@ temp <- list_of_sampling_dates %>% mutate(
     
     .default = "other"
   ))
-    
-temp
 
-
+plant_bind_rows_end
 
 
 ## write out csv file for checking and next stage of analysis
@@ -140,6 +143,5 @@ write.csv(plant_bind_rows_end ,
           paste0(path_name, "R_outputs/", "plant_merged_test.csv"), row.names = FALSE )
 
 
-write.csv(temp ,
-          paste0(path_name, "R_outputs/", "plant_temp.csv"), row.names = FALSE )
+
 
