@@ -40,6 +40,25 @@ plant$date <- as.Date(plant$date, origin = "1899-12-30")
 plant <- plant %>% filter(!is.na(value ))
 str(plant)
 
+## abbreviation the source name 
+plant <- plant %>% 
+  mutate(source1 =
+           gsub('[^[:alnum:] ]', '', source)) %>% 
+  mutate(source2 = 
+           gsub("fs1cbrnexuscsiroauafsandysoilsiiworkOutput2SiteData2SSO2CopevilleFarley","",source1)) %>% 
+  mutate(source_abbreviation =
+           gsub("[[:space:]]", "", source2)) %>% 
+  select(-source1, - source2)
+
+## remove the duplicated NDVI data - still check this is the one to remove
+plant<-
+  plant %>%
+  filter(!source_abbreviation %in% c("3PlantMeasurementsSSO2Biomasstillercounts2024xlsx") |
+           !date %in% c("2024-08-07")|
+           !variable %in% c("NDVI")
+  )
+
+
 
 
 ## how many dates of collection has been captured?  ----------------------------
@@ -81,6 +100,8 @@ types_of_data2
 write.csv(types_of_data2 ,
           paste0(path_name,  "/data_types_collected_samples_plants_v2.csv"), row.names = FALSE )
 
+## remove the data point called %tiller - is made from tiller m2 and doesnt match any other dataset
+
 plant <- plant %>%  filter(variable != "Percent_tillers_m2")
 plant %>%  distinct(variable) %>%  arrange(variable)
 ## how many different depths were observations were collected at? ----------------------------
@@ -100,7 +121,7 @@ write.csv(treatment ,
           paste0(path_name,  "/treatments_names_samples_plants_v1.csv"), row.names = FALSE )
 
 
-rm(dates_of_collection, Depth_NA, depths, plant1, treatment, types_of_data1, types_of_data2)
+rm(dates_of_collection, Depth_NA, depths,  treatment, types_of_data1, types_of_data2)
 ### what was collected at date 1  ----------------------------------------------
 
 date1 <- "2024-06-19"
@@ -357,9 +378,16 @@ treatments_5 <- collection5 %>%
 
 ##### Date5 variable 1  -------------------------------
 
-
+ 
 
 variable_for_plot <- "NDVI"
+ 
+ source_5_2 <- collection5 %>% 
+   filter(variable == variable_for_plot) %>%
+   group_by(variable, source  ) %>% 
+   summarise(n = n()) %>% 
+   count()
+ source_5_2
 
 collection5 %>% 
   filter(variable == variable_for_plot) %>% 
@@ -376,7 +404,10 @@ collection5 %>%
   facet_wrap(.~source)+
   labs(title = paste0(site_name, ": ", data_grouping),
        subtitle = paste0(variable_for_plot, " collected on: " , date5),
-       caption = paste0 ("Number of data sources:", distinct(collection5, source) %>% count()))
+       caption = paste0 ("Number of data sources:", source_5_2[1,2]))
+
+
+
 
 ##### Date5 variable 2  -------------------------------
 
@@ -804,3 +835,4 @@ today_date <- today()
 write.csv(plant ,
           paste0(path_name,  "/plant_merged_check1_", today_date, ".csv"), 
           row.names = FALSE )
+

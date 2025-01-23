@@ -97,7 +97,8 @@ plant_bind_rows_end <- plant_bind_rows_end %>% select(
   depth,
   variable,
   value,
-  source
+  source, 
+  commet
 )
 
 
