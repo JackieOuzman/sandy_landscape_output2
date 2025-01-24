@@ -122,6 +122,22 @@ write.csv(treatment ,
 
 
 rm(dates_of_collection, Depth_NA, depths,  treatment, types_of_data1, types_of_data2)
+
+
+
+## write out csv file that has been checked pass1 and correction pass1
+today_date <- today()
+
+
+write.csv(plant ,
+          paste0(path_name,  "/plant_merged_check1_", today_date, ".csv"), 
+          row.names = FALSE )
+
+
+
+
+
+
 ### what was collected at date 1  ----------------------------------------------
 
 date1 <- "2024-06-19"
@@ -828,11 +844,5 @@ collection11 %>%
 
 
 
-## write out csv file that has been checked pass1 and correction pass1
-today_date <- today()
 
-
-write.csv(plant ,
-          paste0(path_name,  "/plant_merged_check1_", today_date, ".csv"), 
-          row.names = FALSE )
 

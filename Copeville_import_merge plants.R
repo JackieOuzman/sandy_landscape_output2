@@ -98,7 +98,9 @@ plant_bind_rows_end <- plant_bind_rows_end %>% select(
   variable,
   value,
   source, 
-  commet
+  commet,
+  `Ripping factor`  ,
+  `Nutrient factor`
 )
 
 
