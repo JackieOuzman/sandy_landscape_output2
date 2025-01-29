@@ -15,7 +15,7 @@ data_grouping <- "Plant observation"
 sandy_landscape_folder <- "H:/Output-2/Site-Data/"
 site <- "2._SSO2_Copeville-Farley/"
 raw_data <- "Jackies_working/"
-R_outputs <- "R_outputs"
+R_outputs <- "R_outputs/step1/"
 
 
 path_name<- paste0(sandy_landscape_folder,site,raw_data, R_outputs) 
@@ -30,11 +30,10 @@ list_sim_out_file <-
 list_sim_out_file
 
 ## read file -------------------------------------------------------
-plant <- read_csv(paste0(path_name, "/plant_merged_test.csv"), 
-                  col_types = cols(date = col_double()))
-
-# convert date clm
-plant$date <- as.Date(plant$date, origin = "1899-12-30")
+plant <- read_csv(paste0(path_name, "/plant_merged_test.csv"))
+                  # , 
+                  # col_types = cols(date = col_double()))
+str(plant)
 
 #remove rows with no data values
 plant <- plant %>% filter(!is.na(value ))
@@ -125,7 +124,7 @@ rm(dates_of_collection, Depth_NA, depths,  treatment, types_of_data1, types_of_d
 
 
 
-## write out csv file that has been checked pass1 and correction pass1
+# Write out csv file that has been checked pass1 and correction pass1 ----
 today_date <- today()
 
 
