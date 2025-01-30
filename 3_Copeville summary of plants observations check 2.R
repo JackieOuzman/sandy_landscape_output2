@@ -7,6 +7,9 @@ library(lubridate)
 library(readxl)
 #install.packages("openxlsx")
 library(openxlsx)
+library(ggpmisc)
+#install.packages("ggpmisc")
+
 
 # data files -------------------------------------------------------
 site_name <- "Copeville"
@@ -15,7 +18,7 @@ data_grouping <- "Plant observation"
 sandy_landscape_folder <- "H:/Output-2/Site-Data/"
 site <- "2._SSO2_Copeville-Farley/"
 raw_data <- "Jackies_working/"
-R_outputs <- "R_outputs"
+R_outputs <- "R_outputs/step1/"
 
 
 path_name<- paste0(sandy_landscape_folder,site,raw_data, R_outputs) 
@@ -30,9 +33,9 @@ list_sim_out_file <-
 list_sim_out_file
 
 ## read file -------------------------------------------------------
-plant <- read_csv(paste0(path_name, "/plant_merged_check1_2025-01-24.csv"))
+plant <- read_csv(paste0(path_name, "/plant_merged_check1_2025-01-30.csv"))
 
-
+str(plant)
 
 # NDVI ----
 
@@ -76,7 +79,7 @@ plant %>%
        )
 
 
-##### Plot 2. Facet wrap treatments Dates vs NDVI  ----
+##### Plot 2a. Facet wrap treatments Dates vs NDVI  ----
 
 
 plant %>% 
@@ -93,25 +96,31 @@ plant %>%
                                    hjust=1
   ),
   axis.title = element_blank()) +                         
-  facet_wrap(`Nutrient factor`~ `Ripping factor`, ncol = 5)+
+  facet_grid(`Nutrient factor`~ `Ripping factor`)+
   labs(title = paste0(site_name, ": ", data_grouping),
        subtitle = paste0(variable_for_plot),
        caption = ""
   )
 
+ggsave(
+  device = "png",
+  filename = "Copeville_NDVI_vs_Date_Plot_2a.png",
+  path= paste0(sandy_landscape_folder,site,raw_data, "R_outputs/plots/") ,
+  width=8.62,
+  height = 6.28,
+  dpi=600
+)
 
+##### Plot 2b. Facet wrap treatments days after sowing vs NDVI  ----
 
-##### Plot 3. T1 Facet wrap ripping treatments Dates vs NDVI  ----
-
-T1_all_rip <- plant %>% filter( `Nutrient factor` == "T1")
-T1_all_rip %>% 
+str(plant)
+plant %>% 
   filter(variable == variable_for_plot) %>%
-  #filter( `Nutrient factor` == "T1") %>% 
   filter( value != 0) %>% 
   
-  ggplot(aes(x= date , y = value, group = date))+
+  ggplot(aes(x= days_since_sowing , y = value, group = date))+
   geom_point()+
-  geom_boxplot(alpha = 0.2)+
+  #geom_boxplot(alpha = 0.2)+
   
   theme_bw()+
   theme(axis.text.x = element_text(angle = 45, 
@@ -119,11 +128,82 @@ T1_all_rip %>%
                                    hjust=1
   ),
   axis.title = element_blank()) +                         
-  facet_wrap(.~ TreatmentDescription)+
+  facet_grid(`Nutrient factor`~ `Ripping factor`)+
   labs(title = paste0(site_name, ": ", data_grouping),
-       subtitle = paste0(variable_for_plot, ": ", unique(T1_all_rip$`Nutrient factor` )),
+       subtitle = paste0(variable_for_plot),
        caption = ""
   )
+
+
+
+ggsave(
+  device = "png",
+  filename = "Copeville_NDVI_vs_DaysAfterSwowing_Plot_2b.png",
+  path= paste0(sandy_landscape_folder,site,raw_data, "R_outputs/plots/") ,
+  width=8.62,
+  height = 6.28,
+  dpi=600
+)
+
+
+
+##### Plot 3a. T1 Facet wrap ripping treatments days_since_sowing vs NDVI  ----
+
+str(plant)
+
+#https://cran.r-project.org/web/packages/ggpmisc/vignettes/model-based-annotations.html
+Nutrient_Treatment <- "T6"
+
+
+Tx_all_rip <- plant %>% filter( `Nutrient factor` == Nutrient_Treatment)
+formula <- y ~ poly(x, 2, raw = TRUE)
+
+
+Tx_all_rip %>% 
+  filter(variable == variable_for_plot) %>%
+  filter( value != 0) %>% 
+  ggplot(aes(x= days_since_sowing , y = value#, 
+             #group= days_since_sowing
+             ))+
+  geom_point()+
+  geom_smooth(
+              method = "glm", 
+              formula = formula, 
+              se = FALSE
+    )+
+  stat_poly_line(formula = formula) +
+  stat_poly_eq(use_label(c("eq")),  
+               label.y = "bottom",
+               method = "glm",formula = formula)+
+  #geom_boxplot(alpha = 0.2)+ #need the grouping for this but I can't get line fit with grouping
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, 
+                                   vjust = 1, 
+                                   hjust=1
+  ),
+  axis.title = element_blank()) + 
+  facet_wrap(.~ `Ripping factor`)+
+  #scale_x_continuous(limits = c(50, 150), breaks = c(50, 75, 100, 125, 150))+
+  labs(title = paste0(site_name),
+       subtitle = 
+         paste0(variable_for_plot,
+                 " vs Days after sowing",
+                ". Nutrient treatment = ", 
+                unique(Tx_all_rip$`Nutrient factor`),
+                ". All ripping treatments displayed as facet." ),
+                caption = ""
+  )
+
+
+ggsave(
+  device = "png",
+  filename = paste0("Copeville_", Nutrient_Treatment,  "_NDVI_vs_DaysAfterSwowing_Plot_3a.png"),
+  path= paste0(sandy_landscape_folder,site,raw_data, "R_outputs/plots/") ,
+  width=8.62,
+  height = 6.28,
+  dpi=600
+)
+
 
 ##### Plot 4. T1 Facet wrap ripping treatments Phenology_stage vs NDVI  ----
 str(T1_all_rip)
@@ -226,6 +306,32 @@ mean_Tillers_By_date <- plant %>%
   group_by(date) %>% 
   summarise(Tillers_mean=mean(value))
 
+######  Calculate new clm for tiller survival  ----
+str(plant)
+names(plant)
+
+Tiller_subset <-  
+  plant %>% 
+  filter(variable == variable_for_plot, na.rm = TRUE) %>%
+  select(
+    Short_ID,
+    date,
+    variable,
+    value
+    )  %>% 
+   
+  pivot_wider(names_from = date       ,
+              values_from = value) 
+
+Tiller_subset <- Tiller_subset %>% 
+  rename(end_date = `2024-09-26`,
+         start_date = `2024-08-07`)
+  
+Tiller_subset <- Tiller_subset %>% 
+mutate(Tiller_survival_percent =
+           (end_date / start_date)*100) #end date - start date *100
+
+Tiller_subset <- left_join(Tiller_subset, plant)
 
 ##### Plot 1. Facet wrap by date, treatments vs Tillers ----
 plant %>% 
@@ -252,30 +358,38 @@ plant %>%
   )
 
 
-##### Plot 2. Facet wrap treatments Dates vs Tillers  ----
 
 
-plant %>% 
-  filter(variable == variable_for_plot) %>%
+##### Plot 2. Treatments vs Tiller_survival_perc ----
+Tiller_subset
+names(Tiller_subset)
+
+Tiller_subset %>% 
+  filter(variable == variable_for_plot) %>% 
   filter( value != 0) %>% 
-  
-  ggplot(aes(x= date , y = value, group = date))+
+  ggplot(aes(x= TreatmentDescription , y = Tiller_survival_percent))+
   geom_point()+
-  #geom_boxplot(alpha = 0.2)+
-  
+  geom_boxplot(alpha = 0.2)+
+  scale_y_continuous(limits = c(0, 100), breaks = c(0, 50, 100))+
   theme_bw()+
   theme(axis.text.x = element_text(angle = 45, 
                                    vjust = 1, 
                                    hjust=1
   ),
   axis.title = element_blank()) +                         
-  facet_wrap(`Nutrient factor`~ `Ripping factor`, ncol = 5)+
   labs(title = paste0(site_name, ": ", data_grouping),
-       subtitle = paste0(variable_for_plot),
+       subtitle = paste0("Tiller survival percent"),
        caption = ""
   )
 
-
+ggsave(
+  device = "png",
+  filename = paste0("Copeville_", "Tiller_survival_percent",  "_vs_Treamnet.png"),
+  path= paste0(sandy_landscape_folder,site,raw_data, "R_outputs/plots/") ,
+  width=8.62,
+  height = 6.28,
+  dpi=600
+)
 
 ##### Plot 3. T1 Facet wrap ripping treatments Dates vs Tillers  ----
 
@@ -648,4 +762,11 @@ write.csv(Yield_summary ,
 
 
 
-
+ggsave(
+  device = "png",
+  filename = paste0("Copeville_", "Yield",  "_vs_Treamnet.png"),
+  path= paste0(sandy_landscape_folder,site,raw_data, "R_outputs/plots/") ,
+  width=8.62,
+  height = 6.28,
+  dpi=600
+)

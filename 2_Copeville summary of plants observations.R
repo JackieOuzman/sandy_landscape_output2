@@ -179,10 +179,10 @@ ggplot(aes(x= TreatmentDescription , y = value))+
                                 hjust=1
                                 ),
          axis.title = element_blank()) +                         
-  facet_wrap(.~source)+
+  facet_wrap(.~source_abbreviation)+
   labs(title = paste0(site_name, ": ", data_grouping),
        subtitle = paste0(variable_for_plot, " collected on: " , date1),
-       caption = paste0 ("Number of data sources:", distinct(collection1, source) %>% count()))
+       caption = paste0 ("Number of data sources:", distinct(collection1, source_abbreviation) %>% count()))
   
 
 
@@ -217,7 +217,7 @@ collection1 %>%
                                    hjust=1
   ),
   axis.title = element_blank()) +                         
-  facet_wrap(.~source)+
+  facet_wrap(.~source_abbreviation)+
   labs(title = paste0(site_name, ": ", data_grouping),
        subtitle = paste0(variable_for_plot, " collected on: " , date1),
        caption = paste0 ("Number of data sources:", Numb_data_source_plot))
@@ -264,7 +264,7 @@ collection2 %>%
                                    hjust=1
   ),
   axis.title = element_blank()) +                         
-  facet_wrap(.~source)+
+  facet_wrap(.~source_abbreviation)+
   labs(title = paste0(site_name, ": ", data_grouping),
        subtitle = paste0(variable_for_plot, " collected on: " , date2),
        caption = paste0 ("Number of data sources:", distinct(collection2, source) %>% count()))
@@ -312,7 +312,7 @@ collection3 %>%
                                    hjust=1
   ),
   axis.title = element_blank()) +                         
-  facet_wrap(.~source)+
+  facet_wrap(.~source_abbreviation)+
   labs(title = paste0(site_name, ": ", data_grouping),
        subtitle = paste0(variable_for_plot, " collected on: " , date3),
        caption = paste0 ("Number of data sources:", distinct(collection3, source) %>% count()))
@@ -359,7 +359,7 @@ collection4 %>%
                                    hjust=1
   ),
   axis.title = element_blank()) +                         
-  facet_wrap(.~source)+
+  facet_wrap(.~source_abbreviation)+
   labs(title = paste0(site_name, ": ", data_grouping),
        subtitle = paste0(variable_for_plot, " collected on: " , date4),
        caption = paste0 ("Number of data sources:", distinct(collection4, source) %>% count()))
@@ -416,7 +416,7 @@ collection5 %>%
                                    hjust=1
   ),
   axis.title = element_blank()) +                         
-  facet_wrap(.~source)+
+  facet_wrap(.~source_abbreviation)+
   labs(title = paste0(site_name, ": ", data_grouping),
        subtitle = paste0(variable_for_plot, " collected on: " , date5),
        caption = paste0 ("Number of data sources:", source_5_2[1,2]))
@@ -455,7 +455,7 @@ collection5 %>%
                                    hjust=1
   ),
   axis.title = element_blank()) +                         
-  facet_wrap(.~source)+
+  facet_wrap(.~source_abbreviation)+
   labs(title = paste0(site_name, ": ", data_grouping),
        subtitle = paste0(variable_for_plot, " collected on: " , date5),
        caption = paste0 ("Number of data sources:", source_5_2[1,2]))
@@ -507,7 +507,7 @@ collection6 %>%
                                    hjust=1
   ),
   axis.title = element_blank()) +                         
-  facet_wrap(.~source)+
+  facet_wrap(.~source_abbreviation)+
   labs(title = paste0(site_name, ": ", data_grouping),
        subtitle = paste0(variable_for_plot, " collected on: " , date6),
        caption = paste0 ("Number of data sources:", distinct(collection6, source) %>% count()))
@@ -557,7 +557,7 @@ collection7 %>%
                                    hjust=1
   ),
   axis.title = element_blank()) +                         
-  facet_wrap(.~source)+
+  facet_wrap(.~source_abbreviation)+
   labs(title = paste0(site_name, ": ", data_grouping),
        subtitle = paste0(variable_for_plot, " collected on: " , date7),
        caption = paste0 ("Number of data sources:", distinct(collection7, source) %>% count()))
@@ -605,7 +605,7 @@ collection8 %>%
                                    hjust=1
   ),
   axis.title = element_blank()) +                         
-  facet_wrap(.~source)+
+  facet_wrap(.~source_abbreviation)+
   labs(title = paste0(site_name, ": ", data_grouping),
        subtitle = paste0(variable_for_plot, " collected on: " , date8),
        caption = paste0 ("Number of data sources:", distinct(collection8, source) %>% count()))
@@ -669,7 +669,7 @@ collection9 %>%
                                    hjust=1
   ),
   axis.title = element_blank()) +                         
-  facet_wrap(.~source)+
+  facet_wrap(.~source_abbreviation)+
   labs(title = paste0(site_name, ": ", data_grouping),
        subtitle = paste0(variable_for_plot, " collected on: " , date9),
        caption = paste0 ("Number of data sources:", source_5_2[1,2]))
@@ -705,7 +705,7 @@ collection9 %>%
                                    hjust=1
   ),
   axis.title = element_blank()) +                         
-  facet_wrap(.~source)+
+  facet_wrap(.~source_abbreviation)+
   labs(title = paste0(site_name, ": ", data_grouping),
        subtitle = paste0(variable_for_plot, " collected on: " , date9),
        caption = paste0 ("Number of data sources:", source_5_2[1,2]))
@@ -772,7 +772,7 @@ collection10 %>%
                                    hjust=1
   ),
   axis.title = element_blank()) +                         
-  facet_wrap(.~source)+
+  facet_wrap(.~source_abbreviation)+
   labs(title = paste0(site_name, ": ", data_grouping),
        subtitle = paste0(variable_for_plot, " collected on: " , date10),
        caption = paste0 ("Number of data sources:", source_5_2[1,2]))
@@ -836,7 +836,7 @@ collection11 %>%
                                    hjust=1
   ),
   axis.title = element_blank()) +                         
-  facet_wrap(.~source)+
+  facet_wrap(.~source_abbreviation)+
   labs(title = paste0(site_name, ": ", data_grouping),
        subtitle = paste0(variable_for_plot, " collected on: " , date11),
        caption = paste0 ("Number of data sources:", source_5_2[1,2]))

@@ -183,9 +183,7 @@ plant_bind_rows_end_serenity <- plant_bind_rows_end_serenity %>%
          period_since_sowing = days(date - Sowing_date),
          days_since_sowing = time_length(period_since_sowing,unit="days"))
 
-# test <- plant_bind_rows_end_serenity %>%  select(Short_ID, date, sowing_date, days_since_sowing, period_since_sowing)
-# test <- test %>% distinct(date, .keep_all = TRUE ) %>%  arrange(days_since_sowing)
-# test
+
 
 
 
