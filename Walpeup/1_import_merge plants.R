@@ -140,6 +140,12 @@ rm (biomass_NDVI_plant_count, Yield )
 
 # assign sampling dates to plant stage and vice versa
 
+unique(biomass_NDVI_plant_count_yld$date)
+
+NA_DATES <-biomass_NDVI_plant_count_yld %>% 
+  filter (is.na(date))
+## looks like its just the yield data that is missing dates - I am waiting for Kenton
+
 
 
 # #convert to number first or date
@@ -152,67 +158,60 @@ rm (biomass_NDVI_plant_count, Yield )
 biomass_NDVI_plant_count_yld$date <- as.numeric(biomass_NDVI_plant_count_yld$date)
 biomass_NDVI_plant_count_yld$date <- as.Date(biomass_NDVI_plant_count_yld$date, origin = "1899-12-30")
  
- unique(plant_bind_rows_end$date)
- str(plant_bind_rows_end$date)
+ sort(unique(biomass_NDVI_plant_count_yld$date))
+ str(biomass_NDVI_plant_count_yld$date)
 
+ NA_DATES <-biomass_NDVI_plant_count_yld %>% 
+   filter (is.na(date))
+ 
+ 
 
-plant_bind_rows_end <- plant_bind_rows_end %>% mutate(
+ biomass_NDVI_plant_count_yld <- biomass_NDVI_plant_count_yld %>% mutate(
   After_Phenology_stage = case_when(
-    date <        as.Date("2024-05-28") ~ "PreSowing",
-    between(date, as.Date("2024-05-28"), as.Date("2024-06-01")) ~ "After.Sowing",
-    between(date, as.Date("2024-06-01"), as.Date("2024-06-09")) ~ "After.Germination",
-    between(date, as.Date("2024-06-09"), as.Date("2024-06-24")) ~ "After.Emergence",
-
-    between(date, as.Date("2024-06-24"), as.Date("2024-08-03")) ~ "After.VernalSaturation",
-    between(date, as.Date("2024-08-03"), as.Date("2024-08-26") ) ~ "After.TerminalSpikelet",
-    between(date, as.Date("2024-08-26"), as.Date("2024-09-10")) ~ "After.FlagLeaf",
-    between(date, as.Date("2024-09-10"), as.Date("2024-09-18")) ~ "After.Heading",
-    between(date, as.Date("2024-09-18"), as.Date("2024-09-26")) ~ "After.Flowering",
-    between(date, as.Date("2024-09-26"), as.Date("2024-10-29")) ~ "After.StartGrainFill",
-    between(date, as.Date("2024-10-29"), as.Date("2024-10-31")) ~ "After.EndGrainFill",
-    between(date, as.Date("2024-10-31"), as.Date("2024-11-18")) ~ "After.Maturity",
-    date > as.Date("2024-11-18") ~  "After.Harvest",
+    date <        as.Date("2024-08-14") ~ "before start of critical period",
+    date >        as.Date("2024-09-18") ~ "after start of critical period",
     
-    .default = "other"
+    .default = "critical period"
   ))
 
-plant_bind_rows_end
+ biomass_NDVI_plant_count_yld
 
 
 
 ### Add in more details from serenity file based on short ID -----
+# Missing all of this
 
-file_serenity <- "exp3510.obsUnitsDesign.080125.xlsx"
-path_serenity <- "H:/Output-2/Site-Data/2._SSO2_Copeville-Farley/1. SSO2_Trial design_MetaData/"
-
-excel_sheets(paste0(path_serenity, file_serenity))
-
-serenity_details <- read_excel(paste0(path_serenity, file_serenity), 
-                               sheet = "exp3510.obsUnitsDesign.080125" 
-                               #, col_types = "text" 
-                               )
-names(serenity_details)
-names(plant_bind_rows_end)
-
-serenity_details<- serenity_details %>% select(shortID, wholeplot, bay, block, row )
-
-plant_bind_rows_end_serenity<- left_join(
-  plant_bind_rows_end, serenity_details,
-  by = join_by(Short_ID == shortID))
+# file_serenity <- "exp3510.obsUnitsDesign.080125.xlsx"
+# path_serenity <- "H:/Output-2/Site-Data/2._SSO2_Copeville-Farley/1. SSO2_Trial design_MetaData/"
+# 
+# excel_sheets(paste0(path_serenity, file_serenity))
+# 
+# serenity_details <- read_excel(paste0(path_serenity, file_serenity), 
+#                                sheet = "exp3510.obsUnitsDesign.080125" 
+#                                #, col_types = "text" 
+#                                )
+# names(serenity_details)
+# names(plant_bind_rows_end)
+# 
+# serenity_details<- serenity_details %>% select(shortID, wholeplot, bay, block, row )
+# 
+# plant_bind_rows_end_serenity<- left_join(
+#   plant_bind_rows_end, serenity_details,
+#   by = join_by(Short_ID == shortID))
 
 
 
 
 ### Add in new clm days after sowing -----
 
-Sowing_date <- as.Date("2024-05-28")
+Sowing_date <- as.Date("2024-04-26")
 # get date clm into the correct format
-names(plant_bind_rows_end_serenity)
-str(plant_bind_rows_end_serenity$date)
+# names(plant_bind_rows_end_serenity)
+# str(plant_bind_rows_end_serenity$date)
 
 
 
-plant_bind_rows_end_serenity <- plant_bind_rows_end_serenity %>% 
+ biomass_NDVI_plant_count_yld <- biomass_NDVI_plant_count_yld %>% 
   mutate(sowing_date = Sowing_date,
          period_since_sowing = days(date - Sowing_date),
          days_since_sowing = time_length(period_since_sowing,unit="days"))
@@ -222,7 +221,7 @@ plant_bind_rows_end_serenity <- plant_bind_rows_end_serenity %>%
 
 
 ## write out csv file for checking and next stage of analysis
-write.csv(plant_bind_rows_end_serenity ,
+write.csv(biomass_NDVI_plant_count_yld ,
           paste0(path_name, "R_outputs/step1/", "plant_merged.csv"), row.names = FALSE )
 
 
