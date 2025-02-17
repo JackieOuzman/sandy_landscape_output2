@@ -18,7 +18,7 @@ data_grouping <- "Plant observation"
 sandy_landscape_folder <- "H:/Output-2/Site-Data/"
 site <- "2._SSO2_Copeville-Farley/"
 raw_data <- "Jackies_working/"
-R_outputs <- "R_outputs/step1/"
+R_outputs <- "R_outputs/checked_data"
 
 
 path_name<- paste0(sandy_landscape_folder,site,raw_data, R_outputs) 
@@ -33,7 +33,9 @@ list_sim_out_file <-
 list_sim_out_file
 
 ## read file -------------------------------------------------------
-plant <- read_csv(paste0(path_name, "/plant_merged_check1_2025-01-30.csv"))
+plant <- read_csv(paste0(path_name, "/plant_merged2025-01-30.csv"))
+
+
 
 str(plant)
 

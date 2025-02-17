@@ -189,7 +189,7 @@ plant_bind_rows_end_serenity <- plant_bind_rows_end_serenity %>%
 
 ## write out csv file for checking and next stage of analysis
 write.csv(plant_bind_rows_end_serenity ,
-          paste0(path_name, "R_outputs/step1/", "plant_merged_test.csv"), row.names = FALSE )
+          paste0(path_name, "R_outputs/step1/", "plant_merged.csv"), row.names = FALSE )
 
 
 

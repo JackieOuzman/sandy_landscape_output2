@@ -19,6 +19,7 @@ R_outputs <- "R_outputs/step1/"
 
 
 path_name<- paste0(sandy_landscape_folder,site,raw_data, R_outputs) 
+path_name2<- paste0(sandy_landscape_folder,site,raw_data, "R_outputs/checked_data/") 
 
 list_sim_out_file <-
   list.files(
@@ -30,9 +31,8 @@ list_sim_out_file <-
 list_sim_out_file
 
 ## read file -------------------------------------------------------
-plant <- read_csv(paste0(path_name, "/plant_merged_test.csv"))
-                  # , 
-                  # col_types = cols(date = col_double()))
+plant <- read_csv(paste0(path_name, "/plant_merged.csv"))
+                  
 str(plant)
 
 #remove rows with no data values
@@ -67,14 +67,14 @@ dates_of_collection #11
 
 
 write.csv(dates_of_collection ,
-          paste0(path_name,  "/dates_of_collected_samples_plants.csv"), row.names = FALSE )
+          paste0(path_name,  "/Check_dates_of_collected_samples_plants.csv"), row.names = FALSE )
 
 
 ## how many different observations were collected  ----------------------------
 types_of_data1 <- plant %>%  distinct(variable) %>%  arrange(variable)
 types_of_data1
 write.csv(types_of_data1 ,
-          paste0(path_name,  "/data_types_collected_samples_plants_v1.csv"), row.names = FALSE )
+          paste0(path_name,  "/Check_data_types_collected_samples_plants_v1.csv"), row.names = FALSE )
 ## Fixed up names
 plant <- plant %>% 
   mutate(variable =  case_when(
@@ -97,7 +97,7 @@ types_of_data2
 
 
 write.csv(types_of_data2 ,
-          paste0(path_name,  "/data_types_collected_samples_plants_v2.csv"), row.names = FALSE )
+          paste0(path_name,  "/Check_data_types_collected_samples_plants_v2.csv"), row.names = FALSE )
 
 ## remove the data point called %tiller - is made from tiller m2 and doesnt match any other dataset
 
@@ -117,7 +117,7 @@ plant <- plant %>%  mutate(depth = "surface")
 treatment  <- plant %>%  distinct(TreatmentDescription) %>%  arrange(TreatmentDescription)
  
 write.csv(treatment ,
-          paste0(path_name,  "/treatments_names_samples_plants_v1.csv"), row.names = FALSE )
+          paste0(path_name,  "/Check_treatments_names_samples_plants_v1.csv"), row.names = FALSE )
 
 
 rm(dates_of_collection, Depth_NA, depths,  treatment, types_of_data1, types_of_data2)
@@ -128,8 +128,9 @@ rm(dates_of_collection, Depth_NA, depths,  treatment, types_of_data1, types_of_d
 today_date <- today()
 
 
+
 write.csv(plant ,
-          paste0(path_name,  "/plant_merged_check1_", today_date, ".csv"), 
+          paste0(path_name2,  "/plant_merged", today_date, ".csv"), 
           row.names = FALSE )
 
 
