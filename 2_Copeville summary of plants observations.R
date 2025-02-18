@@ -63,7 +63,7 @@ plant<-
 ## how many dates of collection has been captured?  ----------------------------
 dates_of_collection <- plant %>%  distinct(date, .keep_all = TRUE) %>%  
   arrange(date) %>% select(site, date, After_Phenology_stage )
-dates_of_collection #11
+dates_of_collection #12
 
 
 write.csv(dates_of_collection ,
@@ -88,7 +88,9 @@ plant <- plant %>%
     
     variable == "NDVI" ~ "NDVI", 
     
-    variable == "Yield t/ha corrected" ~ "Yield"
+    variable == "Yield t/ha corrected" ~ "Yield",
+    variable == "Harvest index" ~ "Harvest_index"
+    
   ))
 
 types_of_data2 <- plant %>%  distinct(variable) %>%  arrange(variable)
@@ -841,6 +843,74 @@ collection11 %>%
   labs(title = paste0(site_name, ": ", data_grouping),
        subtitle = paste0(variable_for_plot, " collected on: " , date11),
        caption = paste0 ("Number of data sources:", source_5_2[1,2]))
+
+
+
+
+# plots  DATE12 ----------------------------------------------
+rm( collection11, date11, source_11, treatments_11, observation_11)
+
+date12 <- "2024-10-31"
+collection12 <- plant %>%  filter(	date == date12)
+
+
+
+observation_12 <- collection12 %>%  distinct(variable ) %>%  arrange(variable )
+observation_12 
+
+
+source_12 <- collection12 %>% 
+  group_by(variable, source  ) %>% 
+  summarise(n = n())
+source_12
+
+
+treatments_12 <- collection12 %>% 
+  group_by(TreatmentDescription,variable ) %>% 
+  summarise(n = n())
+
+# treatments_10 <- collection10 %>% 
+#    group_by(TreatmentDescription) %>% 
+#    summarise(n = n()) 
+
+treatments_12
+
+##### Date12 variable 1  -------------------------------
+
+
+
+variable_for_plot <- "Harvest_index"
+
+
+collection12 %>% 
+  filter(variable == variable_for_plot) %>%
+  group_by(TreatmentDescription ) %>% 
+  summarise(n = n())
+
+source_5_2 <- collection12 %>% 
+  filter(variable == variable_for_plot) %>%
+  group_by(variable, source  ) %>% 
+  summarise(n = n()) %>% 
+  count()
+source_5_2
+
+collection12 %>% 
+  filter(variable == variable_for_plot) %>% 
+  filter( value != 0) %>% 
+  
+  ggplot(aes(x= TreatmentDescription , y = value))+
+  geom_point()+
+  geom_boxplot(alpha = 0.2)+
+  theme(axis.text.x = element_text(angle = 45, 
+                                   vjust = 1, 
+                                   hjust=1
+  ),
+  axis.title = element_blank()) +                         
+  facet_wrap(.~source_abbreviation)+
+  labs(title = paste0(site_name, ": ", data_grouping),
+       subtitle = paste0(variable_for_plot, " collected on: " , date11),
+       caption = paste0 ("Number of data sources:", source_5_2[1,2]))
+
 
 
 
