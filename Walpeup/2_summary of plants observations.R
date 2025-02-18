@@ -613,104 +613,106 @@ collection8 %>%
 # plots  DATE9 ----------------------------------------------
 rm( collection8, date8, source_8, treatments_8, observation_8)
 
-# date9 <- "2024-xx-xx"
-# collection9 <- plant %>%  filter(	date == date9)
-# 
-# 
-# 
-# observation_9 <- collection9 %>%  distinct(variable ) %>%  arrange(variable )
-# observation_9 
-# 
-# 
-# source_9 <- collection9 %>% 
-#   group_by(variable, source  ) %>% 
-#   summarise(n = n())
-# source_9
-# 
-# 
-# treatments_9 <- collection9 %>% 
-#   group_by(TreatmentDescription,variable ) %>% 
-#   summarise(n = n())
-# 
-# # treatments_9 <- collection9 %>% 
-# #    group_by(TreatmentDescription) %>% 
-# #    summarise(n = n()) 
-# 
-# treatments_9
-# 
-# ##### Date9 variable 1  -------------------------------
-# 
-# observation_9
-# 
-# variable_for_plot <- "NDVI"
-# 
-# 
-# collection9 %>% 
-#   filter(variable == variable_for_plot) %>%
-#   group_by(TreatmentDescription ) %>% 
-#   summarise(n = n())
-# 
-# source_5_2 <- collection9 %>% 
-#   filter(variable == variable_for_plot) %>%
-#   group_by(variable, source  ) %>% 
-#   summarise(n = n()) %>% 
-#   count()
-# source_5_2
-# 
-# collection9 %>% 
-#   filter(variable == variable_for_plot) %>% 
-#   filter( value != 0) %>% 
-#   
-#   ggplot(aes(x= TreatmentDescription , y = value))+
-#   geom_point()+
-#   geom_boxplot(alpha = 0.2)+
-#   theme(axis.text.x = element_text(angle = 45, 
-#                                    vjust = 1, 
-#                                    hjust=1
-#   ),
-#   axis.title = element_blank()) +                         
-#   facet_wrap(.~source_abbreviation)+
-#   labs(title = paste0(site_name, ": ", data_grouping),
-#        subtitle = paste0(variable_for_plot, " collected on: " , date9),
-#        caption = paste0 ("Number of data sources:", source_5_2[1,2]))
-# 
-# ##### Date9 variable 2  -------------------------------
-# 
-# 
-# 
-# variable_for_plot <- "Tillers_m2"
-# 
-# 
-# collection9 %>% 
-#   filter(variable == variable_for_plot) %>%
-#   group_by(TreatmentDescription ) %>% 
-#   summarise(n = n())
-# 
-# source_5_2 <- collection9 %>% 
-#   filter(variable == variable_for_plot) %>%
-#   group_by(variable, source  ) %>% 
-#   summarise(n = n()) %>% 
-#   count()
-# source_5_2
-# 
-# collection9 %>% 
-#   filter(variable == variable_for_plot) %>% 
-#   filter( value != 0) %>% 
-#   
-#   ggplot(aes(x= TreatmentDescription , y = value))+
-#   geom_point()+
-#   geom_boxplot(alpha = 0.2)+
-#   theme(axis.text.x = element_text(angle = 45, 
-#                                    vjust = 1, 
-#                                    hjust=1
-#   ),
-#   axis.title = element_blank()) +                         
-#   facet_wrap(.~source_abbreviation)+
-#   labs(title = paste0(site_name, ": ", data_grouping),
-#        subtitle = paste0(variable_for_plot, " collected on: " , date9),
-#        caption = paste0 ("Number of data sources:", source_5_2[1,2]))
-# 
-# 
+unique(plant$date)
+ #date9 <- "NA" #"2024-xx-xx"
+
+ #collection9 <- plant %>%  filter(	date == date9)
+ 
+ collection9 <- plant %>%  filter(is.na(date))
+ 
+ observation_9 <- collection9 %>%  distinct(variable ) %>%  arrange(variable )
+ observation_9 
+ 
+ 
+ source_9 <- collection9 %>% 
+   group_by(variable, source  ) %>% 
+   summarise(n = n())
+ source_9
+ 
+ 
+ treatments_9 <- collection9 %>% 
+   group_by(TreatmentDescription,variable ) %>% 
+   summarise(n = n())
+ 
+ # treatments_9 <- collection9 %>% 
+ #    group_by(TreatmentDescription) %>% 
+ #    summarise(n = n()) 
+ 
+ treatments_9
+ 
+ ##### Date9 variable 1  -------------------------------
+ 
+ observation_9
+ 
+ variable_for_plot <- "Biomass_kg_ha"
+ 
+ 
+ collection9 %>% 
+   filter(variable == variable_for_plot) %>%
+   group_by(TreatmentDescription ) %>% 
+   summarise(n = n())
+ 
+ source_5_2 <- collection9 %>% 
+   filter(variable == variable_for_plot) %>%
+   group_by(variable, source  ) %>% 
+   summarise(n = n()) %>% 
+   count()
+ source_5_2
+ 
+ collection9 %>% 
+   filter(variable == variable_for_plot) %>% 
+   filter( value != 0) %>% 
+   
+   ggplot(aes(x= TreatmentDescription , y = value))+
+  geom_point()+
+  geom_boxplot(alpha = 0.2)+
+  theme(axis.text.x = element_text(angle = 45,
+                                   vjust = 1,
+                                   hjust=1
+  ),
+  axis.title = element_blank()) +
+  facet_wrap(.~source_abbreviation)+
+  labs(title = paste0(site_name, ": ", data_grouping),
+       subtitle = paste0(variable_for_plot, " collected on: " , date9),
+       caption = paste0 ("Number of data sources:", source_5_2[1,2]))
+
+##### Date9 variable 2  -------------------------------
+
+
+
+variable_for_plot <- "Yield"
+
+
+collection9 %>%
+  filter(variable == variable_for_plot) %>%
+  group_by(TreatmentDescription ) %>%
+  summarise(n = n())
+
+source_5_2 <- collection9 %>%
+  filter(variable == variable_for_plot) %>%
+  group_by(variable, source  ) %>%
+  summarise(n = n()) %>%
+  count()
+source_5_2
+
+collection9 %>%
+  filter(variable == variable_for_plot) %>%
+  filter( value != 0) %>%
+
+  ggplot(aes(x= TreatmentDescription , y = value))+
+  geom_point()+
+  geom_boxplot(alpha = 0.2)+
+  theme(axis.text.x = element_text(angle = 45,
+                                   vjust = 1,
+                                   hjust=1
+  ),
+  axis.title = element_blank()) +
+  facet_wrap(.~source_abbreviation)+
+  labs(title = paste0(site_name, ": ", data_grouping),
+       subtitle = paste0(variable_for_plot, " collected on: " , date9),
+       caption = paste0 ("Number of data sources:", source_5_2[1,2]))
+
+
 
 
 
