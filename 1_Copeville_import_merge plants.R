@@ -50,7 +50,9 @@ excel_sheets(paste0(path_name, file))
 # "growth_stages"
 # "Copeville 2024"   
 # "extra notes"                    
-# "metadata"            
+# "metadata"  
+#NOW 
+#"4.Harvest index" 
 
 
 
@@ -61,7 +63,9 @@ plant <- read_excel(paste0(path_name, file), sheet = "3.plant measure tidy long"
 plant_est_NDVI <- read_excel(paste0(path_name, file), sheet = "3.Plants Est and NDVI tidy long" , col_types = "text" )
 #plant_count <- read_excel(paste0(path_name, file), sheet = "3.Plant counts tidy long" , col_types = "text" )
 Yield <- read_excel(paste0(path_name, file), sheet = "4.yield tidy long" , col_types = "text" )
-
+Harvest_index <- read_excel(paste0(path_name, file), sheet = "4.Harvest index" , col_types = "text" )
+  
+  
 plant_stages <- read_excel(paste0(path_name, file), sheet = "growth_stages" , 
                            col_types = "text" #, 
                            #skip = 4
@@ -86,6 +90,15 @@ plant_bind_rows <- plant_bind_rows1
 # merge the plant  worksheet 4 -------------------------------------------------------
 dim(Yield) #17
 plant_bind_rows_end <- bind_rows(plant_bind_rows, Yield)
+
+
+# merge the harvest index  worksheet 4 -------------------------------------------------------
+
+
+plant_bind_rows_end <- bind_rows(plant_bind_rows_end, Harvest_index)
+
+
+
 
 
 names(plant_bind_rows_end)
