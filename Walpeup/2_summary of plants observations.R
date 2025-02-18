@@ -114,7 +114,9 @@ write.csv(treatment ,
           paste0(path_name,  "/Check_treatments_names_samples_plants_v1.csv"), row.names = FALSE )
 
 
-rm(dates_of_collection, Depth_NA, depths,  treatment, types_of_data1, types_of_data2)
+
+######################################################################################################
+#rm(dates_of_collection, Depth_NA, depths,  treatment, types_of_data1, types_of_data2)
 
 
 
