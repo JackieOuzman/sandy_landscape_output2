@@ -12,16 +12,17 @@ library(ggpmisc)
 
 
 # data files -------------------------------------------------------
-site_name <- "walpeup"
+site_name <- "Wharminda"
 data_grouping <- "Plant observation"
 
 sandy_landscape_folder <- "H:/Output-2/Site-Data/"
-site <- "1. SSO2_Walpeup-Pole/"
+site <- "3. SSO2_Wharminda-Masters/"
 raw_data <- "Jackies_working/"
-R_outputs <- "R_outputs/checked_data"
+R_outputs <- "R_outputs/checked_data/"
 
 
 path_name<- paste0(sandy_landscape_folder,site,raw_data, R_outputs) 
+path_name2<- paste0(sandy_landscape_folder,site,raw_data, "R_outputs/checked_data/") 
 
 list_sim_out_file <-
   list.files(
@@ -33,12 +34,7 @@ list_sim_out_file <-
 list_sim_out_file
 
 ## read file -------------------------------------------------------
-plant <- read_csv(paste0(path_name, "/plant_merged2025-02-18.csv"))
-
-
-
-str(plant)
-
+plant <- read_csv(paste0(path_name, "/plant_merged2025-02-24.csv"))
 # NDVI ----
 
 
@@ -106,7 +102,7 @@ plant %>%
 
 ggsave(
   device = "png",
-  filename = "walpeup_NDVI_vs_Date_Plot_2a.png",
+  filename = "wharminda_NDVI_vs_Date_Plot_2a.png",
   path= paste0(sandy_landscape_folder,site,raw_data, "R_outputs/plots/") ,
   width=8.62,
   height = 6.28,
@@ -140,7 +136,7 @@ plant %>%
 
 ggsave(
   device = "png",
-  filename = "walpeup_NDVI_vs_DaysAfterSwowing_Plot_2b.png",
+  filename = "wharminda_NDVI_vs_DaysAfterSwowing_Plot_2b.png",
   path= paste0(sandy_landscape_folder,site,raw_data, "R_outputs/plots/") ,
   width=8.62,
   height = 6.28,
@@ -199,7 +195,7 @@ Tx_all_rip %>%
 
 ggsave(
   device = "png",
-  filename = paste0("walpeup_", Nutrient_Treatment,  "_NDVI_vs_DaysAfterSwowing_Plot_3a.png"),
+  filename = paste0("wharminda_", Nutrient_Treatment,  "_NDVI_vs_DaysAfterSwowing_Plot_3a.png"),
   path= paste0(sandy_landscape_folder,site,raw_data, "R_outputs/plots/") ,
   width=8.62,
   height = 6.28,
@@ -208,78 +204,78 @@ ggsave(
 
 
 ##### Plot 4. T1 Facet wrap ripping treatments Phenology_stage vs NDVI  ----
-str(T1_all_rip)
-
-T1_all_rip <- plant %>% filter( `Nutrient factor` == "T1")
-T1_all_rip %>%  distinct(After_Phenology_stage)
-
-After_Phenology_stage_order <- c(
-  "before start of critical period",
-  "critical period",
-  "after start of critical period"
-  )
-
-T1_all_rip$After_Phenology_stage <-  factor(T1_all_rip$After_Phenology_stage, levels = After_Phenology_stage_order)
-
-T1_all_rip$After_Phenology_stage
-
-T1_all_rip %>% 
-  filter(variable == variable_for_plot) %>%
-  #filter( `Nutrient factor` == "T1") %>% 
-  filter( value != 0) %>% 
-  
-  ggplot(aes(x= After_Phenology_stage , y = value, group = After_Phenology_stage))+
-  geom_point()+
-  geom_boxplot(alpha = 0.2)+
-  
-  theme_bw()+
-  theme(axis.text.x = element_text(angle = 45, 
-                                   vjust = 1, 
-                                   hjust=1
-  ),
-  axis.title = element_blank()) +                         
-  facet_wrap(.~ TreatmentDescription)+
-  labs(title = paste0(site_name, ": ", data_grouping),
-       subtitle = paste0(variable_for_plot, ": ", unique(T1_all_rip$`Nutrient factor` )),
-       caption = ""
-  )
+# str(T1_all_rip)
+# 
+# T1_all_rip <- plant %>% filter( `Nutrient factor` == "T1")
+# T1_all_rip %>%  distinct(After_Phenology_stage)
+# 
+# After_Phenology_stage_order <- c(
+#   "before start of critical period",
+#   "critical period",
+#   "after start of critical period"
+#   )
+# 
+# T1_all_rip$After_Phenology_stage <-  factor(T1_all_rip$After_Phenology_stage, levels = After_Phenology_stage_order)
+# 
+# T1_all_rip$After_Phenology_stage
+# 
+# T1_all_rip %>% 
+#   filter(variable == variable_for_plot) %>%
+#   #filter( `Nutrient factor` == "T1") %>% 
+#   filter( value != 0) %>% 
+#   
+#   ggplot(aes(x= After_Phenology_stage , y = value, group = After_Phenology_stage))+
+#   geom_point()+
+#   geom_boxplot(alpha = 0.2)+
+#   
+#   theme_bw()+
+#   theme(axis.text.x = element_text(angle = 45, 
+#                                    vjust = 1, 
+#                                    hjust=1
+#   ),
+#   axis.title = element_blank()) +                         
+#   facet_wrap(.~ TreatmentDescription)+
+#   labs(title = paste0(site_name, ": ", data_grouping),
+#        subtitle = paste0(variable_for_plot, ": ", unique(T1_all_rip$`Nutrient factor` )),
+#        caption = ""
+#   )
 
 
 ##### Table 1. Summary stats of NDVI for each Treatments  ----
-str(plant)
-
-
-NDVI_summary <- plant %>% 
-  filter(variable == variable_for_plot) %>%
-  filter( value != 0) %>% 
-  group_by(TreatmentDescription, After_Phenology_stage) %>% 
-  summarise(NDVI_max =  max(value, na.rm = TRUE),
-            NDVI_min =  min(value, na.rm = TRUE),
-            NDVI_mean = mean(value, na.rm = TRUE),
-            NDVI_stdev = sd(value, na.rm = TRUE))
-
-NDVI_summary
-
-##### Table 2. Growth stage max NDVI occurred for each Treatments  ----
-
-
-Max_NDVI_growth_stage <- NDVI_summary %>% 
-  group_by(TreatmentDescription) %>% 
-  summarise(NDVI_max =  max(NDVI_max, na.rm = TRUE))
-
-Max_NDVI_growth_stage1 <- left_join(Max_NDVI_growth_stage, NDVI_summary)
-
-Max_NDVI_growth_stage1 <- Max_NDVI_growth_stage1 %>% 
-  select("TreatmentDescription" ,
-         "After_Phenology_stage",
-         "NDVI_max" ,
-         "NDVI_min"  ,
-         "NDVI_mean"  ,          
-         "NDVI_stdev"  )
-Max_NDVI_growth_stage1
-write.csv(Max_NDVI_growth_stage1 ,
-          paste0(path_name, "/", "Max_NDVI_growth_stage.csv"), row.names = FALSE )
-
+# str(plant)
+# 
+# 
+# NDVI_summary <- plant %>% 
+#   filter(variable == variable_for_plot) %>%
+#   filter( value != 0) %>% 
+#   group_by(TreatmentDescription, After_Phenology_stage) %>% 
+#   summarise(NDVI_max =  max(value, na.rm = TRUE),
+#             NDVI_min =  min(value, na.rm = TRUE),
+#             NDVI_mean = mean(value, na.rm = TRUE),
+#             NDVI_stdev = sd(value, na.rm = TRUE))
+# 
+# NDVI_summary
+# 
+# ##### Table 2. Growth stage max NDVI occurred for each Treatments  ----
+# 
+# 
+# Max_NDVI_growth_stage <- NDVI_summary %>% 
+#   group_by(TreatmentDescription) %>% 
+#   summarise(NDVI_max =  max(NDVI_max, na.rm = TRUE))
+# 
+# Max_NDVI_growth_stage1 <- left_join(Max_NDVI_growth_stage, NDVI_summary)
+# 
+# Max_NDVI_growth_stage1 <- Max_NDVI_growth_stage1 %>% 
+#   select("TreatmentDescription" ,
+#          "After_Phenology_stage",
+#          "NDVI_max" ,
+#          "NDVI_min"  ,
+#          "NDVI_mean"  ,          
+#          "NDVI_stdev"  )
+# Max_NDVI_growth_stage1
+# write.csv(Max_NDVI_growth_stage1 ,
+#           paste0(path_name, "/", "Max_NDVI_growth_stage.csv"), row.names = FALSE )
+# 
 
 
 # Biomass ----
@@ -290,10 +286,10 @@ names(plant)
 str(plant)
 plant %>%  distinct(variable)
 
-variable_for_plot <- "Biomass_kg_ha"
+variable_for_plot <- "Biomass_t_ha"
 
 ######  Calculate mean ----
-mean_Tillers_By_date <- plant %>% 
+Biomass_t_ha_by_date <- plant %>% 
   filter(variable == variable_for_plot, na.rm = TRUE) %>% 
   group_by(date) %>% 
   summarise(Tillers_mean=mean(value))
@@ -331,7 +327,7 @@ plant %>%
 
 ggsave(
   device = "png",
-  filename = paste0("walpeup_", "biomass",  "_vs_Treamnet.png"),
+  filename = paste0("wharminda_", "biomass",  "_vs_Treamnet.png"),
   path= paste0(sandy_landscape_folder,site,raw_data, "R_outputs/plots/") ,
   width=8.62,
   height = 6.28,
@@ -340,100 +336,100 @@ ggsave(
 
 ##### Plot 3. T1 Facet wrap ripping treatments Dates vs biomass  ----
 
-T1_all_rip <- plant %>% filter( `Nutrient factor` == "T1")
-T1_all_rip %>% 
-  filter(variable == variable_for_plot) %>%
-  #filter( `Nutrient factor` == "T1") %>% 
-  filter( value != 0) %>% 
-  
-  ggplot(aes(x= date , y = value, group = date))+
-  geom_point()+
-  geom_boxplot(alpha = 0.2)+
-  
-  theme_bw()+
-  theme(axis.text.x = element_text(angle = 45, 
-                                   vjust = 1, 
-                                   hjust=1
-  ),
-  axis.title = element_blank()) +                         
-  facet_wrap(.~ TreatmentDescription)+
-  labs(title = paste0(site_name, ": ", data_grouping),
-       subtitle = paste0(variable_for_plot, ": ", unique(T1_all_rip$`Nutrient factor` )),
-       caption = ""
-  )
+# T1_all_rip <- plant %>% filter( `Nutrient factor` == "T1")
+# T1_all_rip %>% 
+#   filter(variable == variable_for_plot) %>%
+#   #filter( `Nutrient factor` == "T1") %>% 
+#   filter( value != 0) %>% 
+#   
+#   ggplot(aes(x= date , y = value, group = date))+
+#   geom_point()+
+#   geom_boxplot(alpha = 0.2)+
+#   
+#   theme_bw()+
+#   theme(axis.text.x = element_text(angle = 45, 
+#                                    vjust = 1, 
+#                                    hjust=1
+#   ),
+#   axis.title = element_blank()) +                         
+#   facet_wrap(.~ TreatmentDescription)+
+#   labs(title = paste0(site_name, ": ", data_grouping),
+#        subtitle = paste0(variable_for_plot, ": ", unique(T1_all_rip$`Nutrient factor` )),
+#        caption = ""
+#   )
 
 ##### Plot 4. T1 Facet wrap ripping treatments Phenology_stage vs biomass  ----
-str(T1_all_rip)
-
-T1_all_rip <- plant %>% filter( `Nutrient factor` == "T1")
-T1_all_rip %>%  distinct(After_Phenology_stage)
-
-After_Phenology_stage_order <- c(
-  "before start of critical period",
-  "critical period",
-  "after start of critical period"
-)
-
-T1_all_rip$After_Phenology_stage <-  factor(T1_all_rip$After_Phenology_stage, levels = After_Phenology_stage_order)
-
-T1_all_rip$After_Phenology_stage
-
-T1_all_rip %>% 
-  filter(variable == variable_for_plot) %>%
-  #filter( `Nutrient factor` == "T1") %>% 
-  filter( value != 0) %>% 
-  
-  ggplot(aes(x= After_Phenology_stage , y = value, group = After_Phenology_stage))+
-  geom_point()+
-  geom_boxplot(alpha = 0.2)+
-  
-  theme_bw()+
-  theme(axis.text.x = element_text(angle = 45, 
-                                   vjust = 1, 
-                                   hjust=1
-  ),
-  axis.title = element_blank()) +                         
-  facet_wrap(.~ TreatmentDescription)+
-  labs(title = paste0(site_name, ": ", data_grouping),
-       subtitle = paste0(variable_for_plot, ": ", unique(T1_all_rip$`Nutrient factor` )),
-       caption = ""
-  )
+# str(T1_all_rip)
+# 
+# T1_all_rip <- plant %>% filter( `Nutrient factor` == "T1")
+# T1_all_rip %>%  distinct(After_Phenology_stage)
+# 
+# After_Phenology_stage_order <- c(
+#   "before start of critical period",
+#   "critical period",
+#   "after start of critical period"
+# )
+# 
+# T1_all_rip$After_Phenology_stage <-  factor(T1_all_rip$After_Phenology_stage, levels = After_Phenology_stage_order)
+# 
+# T1_all_rip$After_Phenology_stage
+# 
+# T1_all_rip %>% 
+#   filter(variable == variable_for_plot) %>%
+#   #filter( `Nutrient factor` == "T1") %>% 
+#   filter( value != 0) %>% 
+#   
+#   ggplot(aes(x= After_Phenology_stage , y = value, group = After_Phenology_stage))+
+#   geom_point()+
+#   geom_boxplot(alpha = 0.2)+
+#   
+#   theme_bw()+
+#   theme(axis.text.x = element_text(angle = 45, 
+#                                    vjust = 1, 
+#                                    hjust=1
+#   ),
+#   axis.title = element_blank()) +                         
+#   facet_wrap(.~ TreatmentDescription)+
+#   labs(title = paste0(site_name, ": ", data_grouping),
+#        subtitle = paste0(variable_for_plot, ": ", unique(T1_all_rip$`Nutrient factor` )),
+#        caption = ""
+#   )
 
 
 ##### Table 1. Summary stats of biomass for each Treatments  ----
-str(plant)
-
-
-biomass_summary <- plant %>% 
-  filter(variable == variable_for_plot) %>%
-  filter( value != 0) %>% 
-  group_by(TreatmentDescription, After_Phenology_stage) %>% 
-  summarise(biomass_max =  max(value, na.rm = TRUE),
-            biomass_min =  min(value, na.rm = TRUE),
-            biomass_mean = mean(value, na.rm = TRUE),
-            biomass_stdev = sd(value, na.rm = TRUE))
-
-biomass_summary
+# str(plant)
+# 
+# 
+# biomass_summary <- plant %>% 
+#   filter(variable == variable_for_plot) %>%
+#   filter( value != 0) %>% 
+#   group_by(TreatmentDescription, After_Phenology_stage) %>% 
+#   summarise(biomass_max =  max(value, na.rm = TRUE),
+#             biomass_min =  min(value, na.rm = TRUE),
+#             biomass_mean = mean(value, na.rm = TRUE),
+#             biomass_stdev = sd(value, na.rm = TRUE))
+# 
+# biomass_summary
 
 ##### Table 2. Growth stage max biomass occurred for each Treatments  ----
 
 
-Max_biomass_growth_stage <- biomass_summary %>% 
-  group_by(TreatmentDescription) %>% 
-  summarise(biomass_max =  max(biomass_max, na.rm = TRUE))
-
-Max_biomass_growth_stage1 <- left_join(Max_biomass_growth_stage, biomass_summary)
-
-Max_biomass_growth_stage1 <- Max_biomass_growth_stage1 %>% 
-  select("TreatmentDescription" ,
-         "After_Phenology_stage",
-         "biomass_max" ,
-         "biomass_min"  ,
-         "biomass_mean"  ,          
-         "biomass_stdev"  )
-Max_biomass_growth_stage1
-write.csv(Max_biomass_growth_stage1 ,
-          paste0(path_name, "/", "biomass_growth_stage.csv"), row.names = FALSE )
+# Max_biomass_growth_stage <- biomass_summary %>% 
+#   group_by(TreatmentDescription) %>% 
+#   summarise(biomass_max =  max(biomass_max, na.rm = TRUE))
+# 
+# Max_biomass_growth_stage1 <- left_join(Max_biomass_growth_stage, biomass_summary)
+# 
+# Max_biomass_growth_stage1 <- Max_biomass_growth_stage1 %>% 
+#   select("TreatmentDescription" ,
+#          "After_Phenology_stage",
+#          "biomass_max" ,
+#          "biomass_min"  ,
+#          "biomass_mean"  ,          
+#          "biomass_stdev"  )
+# Max_biomass_growth_stage1
+# write.csv(Max_biomass_growth_stage1 ,
+#           paste0(path_name, "/", "biomass_growth_stage.csv"), row.names = FALSE )
 
 
 # Plants_m2 ----
@@ -566,43 +562,97 @@ T1_all_rip %>%
 
 
 ##### Table 1. Summary stats of Plants for each Treatments  ----
-str(plant)
-
-
-Plants_summary <- plant %>% 
-  filter(variable == variable_for_plot) %>%
-  filter( value != 0) %>% 
-  group_by(TreatmentDescription, After_Phenology_stage) %>% 
-  summarise(Plants_max =  max(value, na.rm = TRUE),
-            Plants_min =  min(value, na.rm = TRUE),
-            Plants_mean = mean(value, na.rm = TRUE),
-            Plants_stdev = sd(value, na.rm = TRUE))
-
-Plants_summary
+# str(plant)
+# 
+# 
+# Plants_summary <- plant %>% 
+#   filter(variable == variable_for_plot) %>%
+#   filter( value != 0) %>% 
+#   group_by(TreatmentDescription, After_Phenology_stage) %>% 
+#   summarise(Plants_max =  max(value, na.rm = TRUE),
+#             Plants_min =  min(value, na.rm = TRUE),
+#             Plants_mean = mean(value, na.rm = TRUE),
+#             Plants_stdev = sd(value, na.rm = TRUE))
+# 
+# Plants_summary
 
 ##### Table 2. Growth stage max Plants occurred for each Treatments  ----
 
 
-Max_Plants_growth_stage <- Plants_summary %>% 
-  group_by(TreatmentDescription) %>% 
-  summarise(Plants_max =  max(Plants_max, na.rm = TRUE))
+# Max_Plants_growth_stage <- Plants_summary %>% 
+#   group_by(TreatmentDescription) %>% 
+#   summarise(Plants_max =  max(Plants_max, na.rm = TRUE))
+# 
+# Max_Plants_growth_stage1 <- left_join(Max_Plants_growth_stage, Plants_summary)
+# 
+# Max_Plants_growth_stage1 <- Max_Plants_growth_stage1 %>% 
+#   select("TreatmentDescription" ,
+#          "After_Phenology_stage",
+#          "Plants_max" ,
+#          "Plants_min"  ,
+#          "Plants_mean"  ,          
+#          "Plants_stdev"  )
+# Max_Plants_growth_stage1
+# write.csv(Max_Plants_growth_stage1 ,
+#           paste0(path_name, "/", "Max_Plants_growth_stage.csv"), row.names = FALSE )
+# 
+# 
+# str(plant)
+# unique(plant$variable)
 
-Max_Plants_growth_stage1 <- left_join(Max_Plants_growth_stage, Plants_summary)
 
-Max_Plants_growth_stage1 <- Max_Plants_growth_stage1 %>% 
-  select("TreatmentDescription" ,
-         "After_Phenology_stage",
-         "Plants_max" ,
-         "Plants_min"  ,
-         "Plants_mean"  ,          
-         "Plants_stdev"  )
-Max_Plants_growth_stage1
-write.csv(Max_Plants_growth_stage1 ,
-          paste0(path_name, "/", "Max_Plants_growth_stage.csv"), row.names = FALSE )
+# Tiller_m2  ----
 
 
+
+names(plant)
 str(plant)
-unique(plant$variable)
+plant %>%  distinct(variable)
+
+variable_for_plot <- "Tiller_m2"
+
+######  Calculate mean ----
+mean_Tillers_By_date <- plant %>% 
+  filter(variable == variable_for_plot, na.rm = TRUE) %>% 
+  group_by(date) %>% 
+  summarise(Plants_mean=mean(value))
+
+mean_Tillers_By_date
+##### Plot 1. Facet wrap by date, treatments vs Plants ----
+plant %>% 
+  filter(variable == variable_for_plot) %>% 
+  filter( value != 0) %>% 
+  
+  ggplot(aes(x= TreatmentDescription , y = value))+
+  # geom_hline(data=mean_Plants_By_date, aes(yintercept=mean_Tillers_By_date, 
+  #                                          col=as.factor(date)),
+  #          linewidth=1.0, colour = "blue")+
+  geom_point()+
+  geom_boxplot(alpha = 0.2)+
+  
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, 
+                                   vjust = 1, 
+                                   hjust=1
+  ),
+  axis.title = element_blank()) +                         
+  facet_wrap(.~ date)+
+  labs(title = paste0(site_name, ": ", data_grouping),
+       subtitle = paste0(variable_for_plot),
+       caption = "Mean value displayed for each date"
+  )
+
+
+ggsave(
+  device = "png",
+  filename = paste0("wharminda_", "Tillers",  "_vs_Treamnet.png"),
+  path= paste0(sandy_landscape_folder,site,raw_data, "R_outputs/plots/") ,
+  width=8.62,
+  height = 6.28,
+  dpi=600
+)
+
+
 # Yield ----
 
 
@@ -657,31 +707,31 @@ After_Phenology_stage_order <- c(
 
 
 ##### Table 1. Summary stats of Yield for each Treatments  ----
-str(plant)
-
-
-Yield_summary <- plant %>% 
-  filter(variable == variable_for_plot) %>%
-  filter( value != 0) %>% 
-  group_by(TreatmentDescription, After_Phenology_stage) %>% 
-  summarise(Yield_max =  max(value, na.rm = TRUE),
-            Yield_min =  min(value, na.rm = TRUE),
-            Yield_mean = mean(value, na.rm = TRUE),
-            Yield_stdev = sd(value, na.rm = TRUE)) %>% 
-  arrange(Yield_mean)
-
-Yield_summary
-
-
-
-write.csv(Yield_summary ,
-          paste0(path_name, "/", "Yield_summary.csv"), row.names = FALSE )
+# str(plant)
+# 
+# 
+# Yield_summary <- plant %>% 
+#   filter(variable == variable_for_plot) %>%
+#   filter( value != 0) %>% 
+#   group_by(TreatmentDescription, After_Phenology_stage) %>% 
+#   summarise(Yield_max =  max(value, na.rm = TRUE),
+#             Yield_min =  min(value, na.rm = TRUE),
+#             Yield_mean = mean(value, na.rm = TRUE),
+#             Yield_stdev = sd(value, na.rm = TRUE)) %>% 
+#   arrange(Yield_mean)
+# 
+# Yield_summary
+# 
+# 
+# 
+# write.csv(Yield_summary ,
+#           paste0(path_name, "/", "Yield_summary.csv"), row.names = FALSE )
 
 
 
 ggsave(
   device = "png",
-  filename = paste0("walpeup_", "Yield",  "_vs_Treamnet.png"),
+  filename = paste0("wharminda_", "Yield",  "_vs_Treamnet.png"),
   path= paste0(sandy_landscape_folder,site,raw_data, "R_outputs/plots/") ,
   width=8.62,
   height = 6.28,
