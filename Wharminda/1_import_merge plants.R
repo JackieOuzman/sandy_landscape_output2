@@ -128,9 +128,12 @@ dim(Yield) #16
 names(Yield)
 
 unique(Yield$date)  
-Yield$date <- as.numeric(Yield$date)
-Yield$date <- as.Date(Yield$date, origin = "1899-12-30") 
-
+str(Yield$date) 
+#Yield$date <- as.numeric(Yield$date)
+#Yield$date <- as.Date(Yield$date, origin = "1899-12-30") 
+Yield$date <- as.Date(Yield$date, "%d/%m/%Y") 
+Yield$date <- as.Date(Yield$date, , origin = "1899-12-30") 
+str(Yield$date)
 
 plant_count_biomass_tillers_NDVI_yld <- bind_rows(plant_count_biomass_tillers_NDVI, Yield)
 rm (plant_count_biomass_tillers_NDVI, Yield )
