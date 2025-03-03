@@ -169,17 +169,47 @@ NA_DATES
    filter (is.na(date))
  NA_DATES
  
-
  plant_count_biomass_tillers_NDVI_yld <- plant_count_biomass_tillers_NDVI_yld %>% mutate(
-  After_Phenology_stage = case_when(
-    date <        as.Date("2024-06-06") ~ "PreSowing",
-    between(date, as.Date("2024-06-06"), as.Date("2024-11-18")) ~ "growing season",
-    date >        as.Date("2024-11-18") ~ "after harvest",
-    
-    .default = "other"
-  ))
-
+   After_Phenology_stage = case_when(
+     date <        as.Date("2024-06-06") ~ "PreSowing",
+     between(date, as.Date("2024-06-06"), as.Date("2024-06-07")) ~ "After.Sowing",
+     between(date, as.Date("2024-06-07"), as.Date("2024-06-12")) ~ "After.Germination",
+     between(date, as.Date("2024-06-12"), as.Date("2024-07-02")) ~ "After.Emergence",
+     
+     between(date, as.Date("2024-07-02"), as.Date("2024-08-07")) ~ "After.VernalSaturation",
+     between(date, as.Date("2024-08-07"), as.Date("2024-08-30") ) ~ "After.TerminalSpikelet",
+     between(date, as.Date("2024-08-30"), as.Date("2024-09-15")) ~ "After.FlagLeaf",
+     
+     between(date, as.Date("2024-09-15"), as.Date("2024-09-21")) ~ "After.Heading",
+     between(date, as.Date("2024-09-21"), as.Date("2024-09-29")) ~ "After.Flowering",
+     between(date, as.Date("2024-09-29"), as.Date("2024-10-31")) ~ "After.StartGrainFill",
+     between(date, as.Date("2024-10-31"), as.Date("2024-11-18")) ~ "After.EndGrainFill",
+     #between(date, as.Date("2024-11-18"), as.Date("")) ~ "After.Maturity",
+     date > as.Date("2024-11-18") ~  "After.Harvest",
+     
+     .default = "other"
+   ))
+ 
  plant_count_biomass_tillers_NDVI_yld
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ # 
+ # plant_count_biomass_tillers_NDVI_yld <- plant_count_biomass_tillers_NDVI_yld %>% mutate(
+ #  After_Phenology_stage = case_when(
+ #    date <        as.Date("2024-06-06") ~ "PreSowing",
+ #    between(date, as.Date("2024-06-06"), as.Date("2024-11-18")) ~ "growing season",
+ #    date >        as.Date("2024-11-18") ~ "after harvest",
+ #    
+ #    .default = "other"
+ #  ))
+ # 
+ # plant_count_biomass_tillers_NDVI_yld
 
 unique(plant_count_biomass_tillers_NDVI_yld$After_Phenology_stage)
 test_other <- plant_count_biomass_tillers_NDVI_yld %>% filter(After_Phenology_stage =="other")

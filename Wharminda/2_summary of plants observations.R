@@ -78,8 +78,9 @@ plant <- plant %>%
     variable == "Biomass (t/ha)"  ~ "Biomass_t_ha",
     variable == "tiller per m2"  ~ "Tiller_m2",
     variable == "Total Emergence (plants/m²)"  ~ "Plants_m2",
+    variable == "Total Emergence (plants/m²) - Final Establishment"  ~ "Final Establishment_Plants_m2",
     variable == "NDVI" ~ "NDVI",
-    variable == "Corrected at 12.5% yield (t/ha)" ~ "Yield"
+    variable == "Field harvest yield t/ha" ~ "Yield"
   ))
 
 types_of_data2 <- plant %>%  distinct(variable) %>%  arrange(variable)

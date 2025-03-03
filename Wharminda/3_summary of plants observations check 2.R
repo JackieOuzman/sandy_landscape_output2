@@ -34,7 +34,7 @@ list_sim_out_file <-
 list_sim_out_file
 
 ## read file -------------------------------------------------------
-plant <- read_csv(paste0(path_name, "/plant_merged2025-02-24.csv"))
+plant <- read_csv(paste0(path_name, "/plant_merged2025-03-03.csv"))
 # NDVI ----
 
 
@@ -302,7 +302,7 @@ plant %>%
   filter( value != 0) %>% 
   
   ggplot(aes(x= TreatmentDescription , y = value))+
-  geom_hline(data=mean_Tillers_By_date, aes(yintercept=Tillers_mean, 
+  geom_hline(data=Biomass_t_ha_by_date, aes(yintercept=Tillers_mean, 
                                          col=as.factor(date)),
              linewidth=1.0, colour = "blue")+
   geom_point()+
