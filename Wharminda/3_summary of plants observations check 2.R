@@ -34,7 +34,7 @@ list_sim_out_file <-
 list_sim_out_file
 
 ## read file -------------------------------------------------------
-plant <- read_csv(paste0(path_name, "/plant_merged2025-03-03.csv"))
+plant <- read_csv(paste0(path_name, "/plant_merged2025-04-30.csv"))
 # NDVI ----
 
 
@@ -732,6 +732,200 @@ After_Phenology_stage_order <- c(
 ggsave(
   device = "png",
   filename = paste0("wharminda_", "Yield",  "_vs_Treamnet.png"),
+  path= paste0(sandy_landscape_folder,site,raw_data, "R_outputs/plots/") ,
+  width=8.62,
+  height = 6.28,
+  dpi=600
+)
+
+
+
+
+
+##### Plot 1. Facet wrap by date, treatments vs Yield quality Protein only----
+names(plant)
+str(plant)
+plant %>%  distinct(variable)
+
+variable_for_plot <- "Protein"
+
+######  Calculate mean ----
+mean_Yield_By_date <- plant %>% 
+  filter(variable == variable_for_plot, na.rm = TRUE) %>% 
+  group_by(date) %>% 
+  summarise(Yield_mean=mean(value))
+
+
+plant %>% 
+  filter(variable == variable_for_plot) %>% 
+  filter( value != 0) %>% 
+  
+  ggplot(aes(x= TreatmentDescription , y = value))+
+  geom_hline(data=mean_Yield_By_date, aes(yintercept=Yield_mean, 
+                                          col=as.factor(date)),
+             linewidth=1.0, colour = "blue")+
+  geom_point()+
+  geom_boxplot(alpha = 0.2)+
+  
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, 
+                                   vjust = 1, 
+                                   hjust=1
+  ),
+  axis.title = element_blank()) +                         
+  facet_wrap(.~ date)+
+  labs(title = paste0(site_name, ": ", data_grouping),
+       subtitle = paste0(variable_for_plot),
+       caption = "Mean value displayed for each date"
+  )
+
+
+ggsave(
+  device = "png",
+  filename = paste0("wharminda_", "Protein",  "_vs_Treamnet.png"),
+  path= paste0(sandy_landscape_folder,site,raw_data, "R_outputs/plots/") ,
+  width=8.62,
+  height = 6.28,
+  dpi=600
+)
+
+
+##### Plot 1. Facet wrap by date, treatments vs Yield quality Moisture only----
+names(plant)
+str(plant)
+plant %>%  distinct(variable)
+
+variable_for_plot <- "Moisture"
+
+######  Calculate mean ----
+mean_Yield_By_date <- plant %>% 
+  filter(variable == variable_for_plot, na.rm = TRUE) %>% 
+  group_by(date) %>% 
+  summarise(Yield_mean=mean(value))
+
+
+plant %>% 
+  filter(variable == variable_for_plot) %>% 
+  filter( value != 0) %>% 
+  
+  ggplot(aes(x= TreatmentDescription , y = value))+
+  geom_hline(data=mean_Yield_By_date, aes(yintercept=Yield_mean, 
+                                          col=as.factor(date)),
+             linewidth=1.0, colour = "blue")+
+  geom_point()+
+  geom_boxplot(alpha = 0.2)+
+  
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, 
+                                   vjust = 1, 
+                                   hjust=1
+  ),
+  axis.title = element_blank()) +                         
+  facet_wrap(.~ date)+
+  labs(title = paste0(site_name, ": ", data_grouping),
+       subtitle = paste0(variable_for_plot),
+       caption = "Mean value displayed for each date"
+  )
+
+
+ggsave(
+  device = "png",
+  filename = paste0("wharminda_", "Moisture",  "_vs_Treamnet.png"),
+  path= paste0(sandy_landscape_folder,site,raw_data, "R_outputs/plots/") ,
+  width=8.62,
+  height = 6.28,
+  dpi=600
+)
+
+##### Plot 1. Facet wrap by date, treatments vs Yield quality TGW_g  only----
+names(plant)
+str(plant)
+plant %>%  distinct(variable)
+
+variable_for_plot <- "TGW_g"
+
+######  Calculate mean ----
+mean_Yield_By_date <- plant %>% 
+  filter(variable == variable_for_plot, na.rm = TRUE) %>% 
+  group_by(date) %>% 
+  summarise(Yield_mean=mean(value))
+
+
+plant %>% 
+  filter(variable == variable_for_plot) %>% 
+  filter( value != 0) %>% 
+  
+  ggplot(aes(x= TreatmentDescription , y = value))+
+  geom_hline(data=mean_Yield_By_date, aes(yintercept=Yield_mean, 
+                                          col=as.factor(date)),
+             linewidth=1.0, colour = "blue")+
+  geom_point()+
+  geom_boxplot(alpha = 0.2)+
+  
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, 
+                                   vjust = 1, 
+                                   hjust=1
+  ),
+  axis.title = element_blank()) +                         
+  facet_wrap(.~ date)+
+  labs(title = paste0(site_name, ": ", data_grouping),
+       subtitle = paste0(variable_for_plot),
+       caption = "Mean value displayed for each date"
+  )
+
+
+ggsave(
+  device = "png",
+  filename = paste0("wharminda_", "TGW_g",  "_vs_Treamnet.png"),
+  path= paste0(sandy_landscape_folder,site,raw_data, "R_outputs/plots/") ,
+  width=8.62,
+  height = 6.28,
+  dpi=600
+)
+
+
+##### Plot 1. Facet wrap by date, treatments vs Yield quality Screenings_perc  only----
+names(plant)
+str(plant)
+plant %>%  distinct(variable)
+
+variable_for_plot <- "Screenings_perc"
+
+######  Calculate mean ----
+mean_Yield_By_date <- plant %>% 
+  filter(variable == variable_for_plot, na.rm = TRUE) %>% 
+  group_by(date) %>% 
+  summarise(Yield_mean=mean(value))
+
+
+plant %>% 
+  filter(variable == variable_for_plot) %>% 
+  filter( value != 0) %>% 
+  
+  ggplot(aes(x= TreatmentDescription , y = value))+
+  geom_hline(data=mean_Yield_By_date, aes(yintercept=Yield_mean, 
+                                          col=as.factor(date)),
+             linewidth=1.0, colour = "blue")+
+  geom_point()+
+  geom_boxplot(alpha = 0.2)+
+  
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 45, 
+                                   vjust = 1, 
+                                   hjust=1
+  ),
+  axis.title = element_blank()) +                         
+  facet_wrap(.~ date)+
+  labs(title = paste0(site_name, ": ", data_grouping),
+       subtitle = paste0(variable_for_plot),
+       caption = "Mean value displayed for each date"
+  )
+
+
+ggsave(
+  device = "png",
+  filename = paste0("wharminda_", "Screenings_perc",  "_vs_Treamnet.png"),
   path= paste0(sandy_landscape_folder,site,raw_data, "R_outputs/plots/") ,
   width=8.62,
   height = 6.28,
