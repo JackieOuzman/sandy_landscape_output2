@@ -80,7 +80,17 @@ plant <- plant %>%
     variable == "Total Emergence (plants/m²)"  ~ "Plants_m2",
     variable == "Total Emergence (plants/m²) - Final Establishment"  ~ "Final Establishment_Plants_m2",
     variable == "NDVI" ~ "NDVI",
-    variable == "Field harvest yield t/ha" ~ "Yield"
+    variable == "Field harvest yield t/ha" ~ "Yield",
+    variable == "Harvest Weight"~ "Harvest_Weight",
+    variable == "Test Weight"~ "Test_Weight",
+    variable == "Screenings"~ "Screenings",
+    variable == "TGW"~ "TGW",
+    variable == "Moisture" ~ "Moisture",
+    variable == "Protein" ~ "Protein",
+    variable == "Grain test weight - converted(kg/hL)" ~ "Grain_test_weight",
+    variable == "TGW converted (g)"~ "TGW_g",
+    variable == "Screenings- converted (%)" ~ "Screenings_perc",
+    
   ))
 
 types_of_data2 <- plant %>%  distinct(variable) %>%  arrange(variable)
