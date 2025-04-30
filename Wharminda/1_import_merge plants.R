@@ -47,7 +47,8 @@ excel_sheets(paste0(path_name, file))
 # "3.Biomass tidy long"            
 # "3.Tillers tidy long"  
 # "3.NDVI tidy long"      
-# "4.yield tidy long"              
+# "4.yield tidy long"    
+# "5.yield quality tidy long"
 # "Growth stages"   
 # "2024 notes"                     
 
@@ -60,6 +61,7 @@ plant_biomass <- read_excel(paste0(path_name, file), sheet = "3.Biomass tidy lon
 plant_Tillers <- read_excel(paste0(path_name, file), sheet = "3.Tillers tidy long" , col_types = "text" )
 plant_est_NDVI <- read_excel(paste0(path_name, file), sheet = "3.NDVI tidy long" , col_types = "text" )
 Yield <- read_excel(paste0(path_name, file), sheet = "4.yield tidy long" , col_types = "text" )
+Yield_quaility <- read_excel(paste0(path_name, file), sheet = "5.yield quality tidy long" , col_types = "text" )
 
 plant_stages <- read_excel(paste0(path_name, file), sheet = "Growth stages" , 
                            col_types = "text" , 
@@ -127,26 +129,42 @@ rm (plant_count_biomass_tillers, plant_est_NDVI )
 dim(Yield) #16
 names(Yield)
 
+
+dim(Yield) #16
+names(Yield)
 unique(Yield$date)  
-str(Yield$date) 
-#Yield$date <- as.numeric(Yield$date)
-#Yield$date <- as.Date(Yield$date, origin = "1899-12-30") 
-Yield$date <- as.Date(Yield$date, "%d/%m/%Y") 
-Yield$date <- as.Date(Yield$date, , origin = "1899-12-30") 
-str(Yield$date)
+Yield$date <- as.numeric(Yield$date)
+Yield$date <- as.Date(Yield$date, origin = "1899-12-30") 
+
+
 
 plant_count_biomass_tillers_NDVI_yld <- bind_rows(plant_count_biomass_tillers_NDVI, Yield)
 rm (plant_count_biomass_tillers_NDVI, Yield )
 
+# merge the yield quality -----------------------------------------------------
 
+dim(Yield_quaility) #17
+names(Yield_quaility)
+unique(Yield_quaility$date)  
+Yield_quaility$date <- as.numeric(Yield_quaility$date)
+Yield_quaility$date <- as.Date(Yield_quaility$date, origin = "1899-12-30") 
+
+
+
+plant_count_biomass_tillers_NDVI_yld_quaility <- bind_rows(plant_count_biomass_tillers_NDVI_yld, Yield_quaility)
+
+rm (plant_count_biomass_tillers_NDVI_yld, Yield_quaility )
+
+
+################################################################################
 
 
 
 # assign sampling dates to plant stage and vice versa
 
-unique(plant_count_biomass_tillers_NDVI_yld$date)
+unique(plant_count_biomass_tillers_NDVI_yld_quaility$date)
 
-NA_DATES <-plant_count_biomass_tillers_NDVI_yld %>% 
+NA_DATES <-plant_count_biomass_tillers_NDVI_yld_quaility %>% 
   filter (is.na(date))
 ## looks like its just the yield data that is missing dates - I am waiting for Kenton / Brett I added as 31/12/2024
 NA_DATES
@@ -162,14 +180,14 @@ NA_DATES
 # plant_count_biomass_tillers_NDVI_yld$date <- as.numeric(plant_count_biomass_tillers_NDVI_yld$date)
 # plant_count_biomass_tillers_NDVI_yld$date <- as.Date(plant_count_biomass_tillers_NDVI_yld$date, origin = "1899-12-30")
  
- sort(unique(plant_count_biomass_tillers_NDVI_yld$date))
- str(plant_count_biomass_tillers_NDVI_yld$date)
+ sort(unique(plant_count_biomass_tillers_NDVI_yld_quaility$date))
+ str(plant_count_biomass_tillers_NDVI_yld_quaility$date)
 
- NA_DATES <-plant_count_biomass_tillers_NDVI_yld %>% 
+ NA_DATES <-plant_count_biomass_tillers_NDVI_yld_quaility %>% 
    filter (is.na(date))
  NA_DATES
  
- plant_count_biomass_tillers_NDVI_yld <- plant_count_biomass_tillers_NDVI_yld %>% mutate(
+ plant_count_biomass_tillers_NDVI_yld_quaility <- plant_count_biomass_tillers_NDVI_yld_quaility %>% mutate(
    After_Phenology_stage = case_when(
      date <        as.Date("2024-06-06") ~ "PreSowing",
      between(date, as.Date("2024-06-06"), as.Date("2024-06-07")) ~ "After.Sowing",
@@ -190,7 +208,7 @@ NA_DATES
      .default = "other"
    ))
  
- plant_count_biomass_tillers_NDVI_yld
+ plant_count_biomass_tillers_NDVI_yld_quaility
  
  
  
@@ -211,8 +229,8 @@ NA_DATES
  # 
  # plant_count_biomass_tillers_NDVI_yld
 
-unique(plant_count_biomass_tillers_NDVI_yld$After_Phenology_stage)
-test_other <- plant_count_biomass_tillers_NDVI_yld %>% filter(After_Phenology_stage =="other")
+unique(plant_count_biomass_tillers_NDVI_yld_quaility$After_Phenology_stage)
+test_other <- plant_count_biomass_tillers_NDVI_yld_quaility %>% filter(After_Phenology_stage =="other")
 unique(test_other$date)
 ### Add in more details from serenity file based on short ID -----
 # Missing all of this
@@ -238,6 +256,9 @@ unique(test_other$date)
 
 
 
+
+
+
 ### Add in new clm days after sowing -----
 
 Sowing_date <- as.Date("2024-06-06")
@@ -247,7 +268,7 @@ Sowing_date <- as.Date("2024-06-06")
 
 
 
- plant_count_biomass_tillers_NDVI_yld <- plant_count_biomass_tillers_NDVI_yld %>% 
+plant_count_biomass_tillers_NDVI_yld_quaility <- plant_count_biomass_tillers_NDVI_yld_quaility %>% 
   mutate(sowing_date = Sowing_date,
          period_since_sowing = days(date - Sowing_date),
          days_since_sowing = time_length(period_since_sowing,unit="days"))
@@ -257,7 +278,7 @@ Sowing_date <- as.Date("2024-06-06")
 
 
 ## write out csv file for checking and next stage of analysis
-write.csv(plant_count_biomass_tillers_NDVI_yld ,
+write.csv(plant_count_biomass_tillers_NDVI_yld_quaility ,
           paste0(path_name, "R_outputs/step1/", "plant_merged.csv"), row.names = FALSE )
 
 
