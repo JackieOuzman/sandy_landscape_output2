@@ -89,7 +89,9 @@ plant <- plant %>%
     variable == "NDVI" ~ "NDVI", 
     
     variable == "Yield t/ha corrected" ~ "Yield",
-    variable == "Harvest index" ~ "Harvest_index"
+    variable == "Harvest index" ~ "Harvest_index",
+    variable == "Biomass kg/ha" ~ "Biomass_kg_ha",
+    variable == "biomass kg/ha" ~ "Biomass_kg_ha"
     
   ))
 
