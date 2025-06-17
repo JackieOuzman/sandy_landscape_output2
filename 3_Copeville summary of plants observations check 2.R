@@ -33,7 +33,7 @@ list_sim_out_file <-
 list_sim_out_file
 
 ## read file -------------------------------------------------------
-plant <- read_csv(paste0(path_name, "/plant_merged2025-06-17.csv"))
+plant <- read_csv(paste0(path_name, "/plant_merged2025-06-18.csv"))
 
 
 
@@ -774,7 +774,7 @@ ggsave(
 )
 
 
-#### UP TO HERE #####
+
 # Biomass ----
 
 
