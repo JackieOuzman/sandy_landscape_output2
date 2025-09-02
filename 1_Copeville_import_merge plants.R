@@ -64,7 +64,7 @@ plant_est_NDVI <- read_excel(paste0(path_name, file), sheet = "3.Plants Est and 
 #plant_count <- read_excel(paste0(path_name, file), sheet = "3.Plant counts tidy long" , col_types = "text" )
 Yield <- read_excel(paste0(path_name, file), sheet = "4.yield tidy long" , col_types = "text" )
 Harvest_index <- read_excel(paste0(path_name, file), sheet = "4.Harvest index" , col_types = "text" )
-  
+distinct(Harvest_index, variable)
   
 plant_stages <- read_excel(paste0(path_name, file), sheet = "growth_stages" , 
                            col_types = "text" #, 
@@ -197,7 +197,27 @@ plant_bind_rows_end_serenity <- plant_bind_rows_end_serenity %>%
          days_since_sowing = time_length(period_since_sowing,unit="days"))
 
 
+distinct(plant_bind_rows_end_serenity, variable)
 
+
+
+plant_bind_rows_end_serenity <- plant_bind_rows_end_serenity %>% dplyr::rename(tillers_m2 = "tillers/m2"#,
+                                       # tillers_m2 = "tiller per m2",
+                                       # percent_viable_tiller = "percent viable tiller",
+                                       # biomass_kg_ha = "biomass kg/ha",
+                                       # biomass_kg_ha = "Biomass kg/ha",
+                                       # plants_m2 = "Plants/m2",
+                                       # av_plants_m2 = "Av of Plants/m2",
+                                       # yield_t_ha_corrected =  "Yield t/ha corrected",
+                                       # percent_protein = "Protein (%)",
+                                       # n_removal = "N removal",
+                                       # harvest_index = "Harvest index",
+                                       # grain_weigh_g = "1000 Gwt (g)",
+                                       # grain_numbe_m2 = "Grain number/m2",
+                                       # headnumber_m2 = "Headnumber/m2",
+                                       # grains_per_spike = "Grains per spike"
+                                       # 
+                                       )
 
 
 ## write out csv file for checking and next stage of analysis
