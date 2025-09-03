@@ -220,9 +220,9 @@ plant_bind_rows_end_serenity <- plant_bind_rows_end_serenity %>% mutate(
     variable_old == "Harvest index"                     ~ "harvest_index" ,
     variable_old == "N removal"                         ~ "n_removal",
     variable_old == "1000 Gwt (g)"                      ~ "grain_weigh_g",
-    variable_old == "Grain number/m2"                   ~ "grain_numbe_m2",
+    variable_old == "Grain number/m2"                   ~ "grain_number_m2",
     
-    variable_old == "Headnumber/m2"                     ~ "headnumber_m2",
+    variable_old == "Headnumber/m2"                     ~ "head_number_m2",
     variable_old == "Grains per spike"                 ~ "grains_per_spike",
     variable_old == "NDVI"                               ~ "NDVI",
      .default = "opps"
