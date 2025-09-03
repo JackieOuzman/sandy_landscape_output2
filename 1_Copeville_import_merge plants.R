@@ -199,25 +199,36 @@ plant_bind_rows_end_serenity <- plant_bind_rows_end_serenity %>%
 
 distinct(plant_bind_rows_end_serenity, variable)
 
+plant_bind_rows_end_serenity <- plant_bind_rows_end_serenity %>% dplyr::rename(variable_old = variable)
+distinct(plant_bind_rows_end_serenity, variable_old)
+names(plant_bind_rows_end_serenity)
 
 
-plant_bind_rows_end_serenity <- plant_bind_rows_end_serenity %>% dplyr::rename(tillers_m2 = "tillers/m2"#,
-                                       # tillers_m2 = "tiller per m2",
-                                       # percent_viable_tiller = "percent viable tiller",
-                                       # biomass_kg_ha = "biomass kg/ha",
-                                       # biomass_kg_ha = "Biomass kg/ha",
-                                       # plants_m2 = "Plants/m2",
-                                       # av_plants_m2 = "Av of Plants/m2",
-                                       # yield_t_ha_corrected =  "Yield t/ha corrected",
-                                       # percent_protein = "Protein (%)",
-                                       # n_removal = "N removal",
-                                       # harvest_index = "Harvest index",
-                                       # grain_weigh_g = "1000 Gwt (g)",
-                                       # grain_numbe_m2 = "Grain number/m2",
-                                       # headnumber_m2 = "Headnumber/m2",
-                                       # grains_per_spike = "Grains per spike"
-                                       # 
-                                       )
+
+plant_bind_rows_end_serenity <- plant_bind_rows_end_serenity %>% mutate(
+  variable = case_when(
+    variable_old == "tillers/m2" | variable_old == "tiller per m2"       ~ "tillers_m2",
+    variable_old == "percent viable tiller"                              ~ "percent_viable_tiller",
+    variable_old == "biomass kg/ha"|variable_old == "Biomass kg/ha"      ~ "biomass_kg_ha",
+    variable_old == "Plants/m2"                                          ~ "plants_m2",
+    variable_old == "Av of Plants/m2"                                    ~ "av_plants_m2",
+    variable_old ==  "Yield t/ha corrected"                              ~ "yield_t_ha_corrected",
+    variable_old == "Protein (%)"                                        ~ "percent_protein",
+    variable_old == "N removal"                                           ~ "n_removal",
+    
+    
+    variable_old == "Harvest index"                     ~ "harvest_index" ,
+    variable_old == "N removal"                         ~ "n_removal",
+    variable_old == "1000 Gwt (g)"                      ~ "grain_weigh_g",
+    variable_old == "Grain number/m2"                   ~ "grain_numbe_m2",
+    
+    variable_old == "Headnumber/m2"                     ~ "headnumber_m2",
+    variable_old == "Grains per spike"                 ~ "grains_per_spike",
+    variable_old == "NDVI"                               ~ "NDVI",
+     .default = "opps"
+))
+
+
 
 
 ## write out csv file for checking and next stage of analysis
