@@ -31,7 +31,7 @@ list_sim_out_file <-
 list_sim_out_file
 
 ## read file -------------------------------------------------------
-plant <- read_csv(paste0(path_name, "/plant_merged2025-02-24.csv"))
+plant <- read_csv(paste0(path_name, "/plant_merged2025-09-08.csv"))
                   
 #### check dates are correct
 
@@ -40,6 +40,78 @@ str(plant$date)
 plant$date <- ymd(plant$date)
 test <- plant %>% count(date, variable)
 test
+
+
+#### check it has all come in ###
+str(plant)
+plant %>% distinct(variable)
+
+NDVI_DATES <- plant %>% 
+  filter(variable== "NDVI") %>% 
+  group_by(date ) %>% 
+  summarise(
+    count = n(),
+    mean_value = mean(value, na.rm = TRUE))
+### all good
+#############################################################################
+total_emergence_plants_m2_1_DATES <- plant %>% 
+  filter(variable== "total_emergence_plants_m2") %>% 
+  group_by(date ) %>% 
+  summarise(
+    count = n(),
+    mean_value = mean(value, na.rm = TRUE),
+    max_DAS = max(days_since_sowing, na.rm = TRUE))
+total_emergence_plants_m2_1_DATES
+##Yes we have this
+
+
+total_emergence_plants_m2_final_establishment_DATES <- plant %>% 
+  filter(variable== "total_emergence_plants_m2_final_establishment") %>% 
+  group_by(date ) %>% 
+  summarise(
+    count = n(),
+    mean_value = mean(value, na.rm = TRUE),
+    max_DAS = max(days_since_sowing, na.rm = TRUE))
+total_emergence_plants_m2_final_establishment_DATES
+##Yes we have this
+#############################################################################
+#tiller_per_m2
+str(plant)
+plant %>% distinct(variable)
+
+tiller_per_m2_DATES <- plant %>% 
+  filter(variable== "tiller_per_m2") %>% 
+  group_by(date ) %>% 
+  summarise(
+    count = n(),
+    mean_value = mean(value, na.rm = TRUE),
+    max_DAS = max(days_since_sowing, na.rm = TRUE))
+tiller_per_m2_DATES
+#all good
+
+#############################################################################
+#biomass_t_ha
+str(plant)
+plant %>% distinct(variable)
+
+biomass_t_ha_DATES <- plant %>% 
+  filter(variable== "biomass_t_ha") %>% 
+  group_by(date ) %>% 
+  summarise(
+    count = n(),
+    mean_value = mean(value, na.rm = TRUE),
+    max_DAS = max(days_since_sowing, na.rm = TRUE))
+biomass_t_ha_DATES
+
+### Kenton think we have a biomass 3 reading ####
+
+#############################################################################
+#biomass_t_ha
+str(plant)
+plant %>% distinct(variable)
+
+
+
 
 
 ### what was collected at date 1  ----------------------------------------------
@@ -64,6 +136,9 @@ treatments_1 <- collection1 %>%
   group_by(TreatmentDescription, variable ) %>% 
    summarise(n = n())
 treatments_1
+
+
+
 
 # plots  DATE 1----------------------------------------------
 ##### Date1 variable 1  -------------------------------
