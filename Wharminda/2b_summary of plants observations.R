@@ -31,7 +31,7 @@ list_sim_out_file <-
 list_sim_out_file
 
 ## read file -------------------------------------------------------
-plant <- read_csv(paste0(path_name, "/plant_merged2025-09-08.csv"))
+plant <- read_csv(paste0(path_name, "/plant_merged2025-09-09.csv"))
                   
 #### check dates are correct
 
@@ -103,11 +103,7 @@ biomass_t_ha_DATES <- plant %>%
     max_DAS = max(days_since_sowing, na.rm = TRUE))
 biomass_t_ha_DATES
 
-### Kenton think we have a biomass 3 reading ####
 
-#############################################################################
-#biomass_t_ha
-str(plant)
 plant %>% distinct(variable)
 
 

@@ -34,7 +34,7 @@ list_sim_out_file <-
 list_sim_out_file
 
 ## read file -------------------------------------------------------
-plant <- read_csv(paste0(path_name, "/plant_merged2025-04-30.csv"))
+plant <- read_csv(paste0(path_name, "/plant_merged2025-09-09.csv"))
 # NDVI ----
 
 
