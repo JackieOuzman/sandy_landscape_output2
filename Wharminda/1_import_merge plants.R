@@ -50,8 +50,8 @@ excel_sheets(paste0(path_name, file))
 
 # "4_yield tidy long"
 
-# "5.yield quality tidy v1 long" 
-# "5.yield quality tidy v2 long"
+# "5.yield quality tidy v1 long old" 
+# "5.yield quality tidy v3" #this is the newset one that Brett corrected
 
 
 # "Growth stages"   
@@ -67,8 +67,8 @@ plant_biomass <- read_excel(paste0(path_name, file), sheet = "3.Biomass tidy lon
 plant_Tillers <- read_excel(paste0(path_name, file), sheet = "3.Tillers tidy long" , col_types = "text" )
 plant_est_NDVI <- read_excel(paste0(path_name, file), sheet = "3.NDVI tidy long" , col_types = "text" )
 Yield <- read_excel(paste0(path_name, file), sheet = "4_yield tidy long" , col_types = "text" )
-Yield_quaility <- read_excel(paste0(path_name, file), sheet = "5.yield quality tidy v1 long" , col_types = "text" )
-Yield_quaility_2 <- read_excel(paste0(path_name, file), sheet = "5.yield quality tidy v2 long" , col_types = "text" )
+#Yield_quaility <- read_excel(paste0(path_name, file), sheet = "5.yield quality tidy v1 long" , col_types = "text" )
+Yield_quaility_2 <- read_excel(paste0(path_name, file), sheet = "5.yield quality tidy v3" , col_types = "text" )
 
 
 
@@ -153,21 +153,21 @@ rm (plant_count_biomass_tillers_NDVI, Yield )
 
 # merge the yield quality -----------------------------------------------------
 
-dim(Yield_quaility) #17
-names(Yield_quaility)
-unique(Yield_quaility$date)  
-Yield_quaility$date <- as.numeric(Yield_quaility$date)
-Yield_quaility$date <- as.Date(Yield_quaility$date, origin = "1899-12-30") 
-
-
-
-plant_count_biomass_tillers_NDVI_yld_quaility <- bind_rows(plant_count_biomass_tillers_NDVI_yld, Yield_quaility)
-
-rm (plant_count_biomass_tillers_NDVI_yld, Yield_quaility )
+# dim(Yield_quaility) #17
+# names(Yield_quaility)
+# unique(Yield_quaility$date)  
+# Yield_quaility$date <- as.numeric(Yield_quaility$date)
+# Yield_quaility$date <- as.Date(Yield_quaility$date, origin = "1899-12-30") 
+# 
+# 
+# 
+# plant_count_biomass_tillers_NDVI_yld_quaility <- bind_rows(plant_count_biomass_tillers_NDVI_yld, Yield_quaility)
+# 
+# rm (plant_count_biomass_tillers_NDVI_yld, Yield_quaility )
 
 
 ################################################################################
-
+plant_count_biomass_tillers_NDVI_yld_quaility <- plant_count_biomass_tillers_NDVI_yld
 
 # merge the yield quality 2 -----------------------------------------------------
 
@@ -309,7 +309,7 @@ plant_count_biomass_tillers_NDVI_yld_quaility_2 <- plant_count_biomass_tillers_N
 back_up <- plant_count_biomass_tillers_NDVI_yld_quaility_2
 names(plant_count_biomass_tillers_NDVI_yld_quaility_2)
 plant_count_biomass_tillers_NDVI_yld_quaility_2 <- plant_count_biomass_tillers_NDVI_yld_quaility_2 %>% 
-  select(- "Bay(Range)_Row_Treatment to join" ,
+  select(#- "Bay(Range)_Row_Treatment to join" ,
          -  "Column1" 
          )
 
@@ -336,105 +336,105 @@ plant_count_biomass_tillers_NDVI_yld_quaility_2 <- plant_count_biomass_tillers_N
 list_of_variables <- distinct(plant_count_biomass_tillers_NDVI_yld_quaility_2, variable)
 names (plant_count_biomass_tillers_NDVI_yld_quaility_2)
 
-test_TW <- plant_count_biomass_tillers_NDVI_yld_quaility_2 %>% 
-  select("label"  , "Ripping factor"   , "Nutrient factor", "value", "variable", "source" )
+# test_TW <- plant_count_biomass_tillers_NDVI_yld_quaility_2 %>% 
+#   select("label"  , "Ripping factor"   , "Nutrient factor", "value", "variable", "source" )
+# 
+# test_TW <- test_TW %>% 
+#   filter(variable == "Test Weight"|
+#            variable ==   "TGW"|
+#            variable == "TGW converted (g)"|
+#            variable == "test_weight"|
+#            variable == "Grain test weight - converted(kg/hL)")
+# str(test_TW)
+# 
+# 
+# 
+# summary <- test_TW %>% group_by(variable) %>% 
+#   
+#   summarise(
+#     mean_value = mean(value, na.rm = TRUE),
+#     sd_value = sd(value, na.rm = TRUE),
+#     min_value = min(value, na.rm = TRUE),
+#     max_value = max(value, na.rm = TRUE),
+#     count = n()
+#   )
+# source_TW <- plant_count_biomass_tillers_NDVI_yld_quaility_2 %>% 
+# group_by(variable) %>% 
+#   distinct(variable, .keep_all = TRUE) %>% 
+#   select(variable, source)
+# 
+# summary <- left_join(summary, source_TW)
+# 
+# 
+# write.csv(summary ,
+#           paste0(path_name, "R_outputs/step1/", "plant_merged_source_TW.csv"), row.names = FALSE )
 
-test_TW <- test_TW %>% 
-  filter(variable == "Test Weight"|
-           variable ==   "TGW"|
-           variable == "TGW converted (g)"|
-           variable == "test_weight"|
-           variable == "Grain test weight - converted(kg/hL)")
-str(test_TW)
-
-
-
-summary <- test_TW %>% group_by(variable) %>% 
-  
-  summarise(
-    mean_value = mean(value, na.rm = TRUE),
-    sd_value = sd(value, na.rm = TRUE),
-    min_value = min(value, na.rm = TRUE),
-    max_value = max(value, na.rm = TRUE),
-    count = n()
-  )
-source_TW <- plant_count_biomass_tillers_NDVI_yld_quaility_2 %>% 
-group_by(variable) %>% 
-  distinct(variable, .keep_all = TRUE) %>% 
-  select(variable, source)
-
-summary <- left_join(summary, source_TW)
-
-
-write.csv(summary ,
-          paste0(path_name, "R_outputs/step1/", "plant_merged_source_TW.csv"), row.names = FALSE )
-
-####
-test_protien <- plant_count_biomass_tillers_NDVI_yld_quaility_2 %>% 
-  select("label"  , "Ripping factor"   , "Nutrient factor", "value", "variable", "source" )
-
-distinct(test_protien , variable)
-
-test_protien <- test_protien %>% 
-  filter(variable == "percent_protein"|
-           variable ==   "Protein")
-
-str(test_protien)
-
-
-
-summary_protien <- test_protien %>% group_by(variable) %>% 
-  
-  summarise(
-    mean_value = mean(value, na.rm = TRUE),
-    sd_value = sd(value, na.rm = TRUE),
-    min_value = min(value, na.rm = TRUE),
-    max_value = max(value, na.rm = TRUE),
-    count = n()
-  )
-
-
-summary_protien <- left_join(summary_protien, source_TW)
-write.csv(summary_protien ,
-          paste0(path_name, "R_outputs/step1/", "plant_merged_protien.csv"), row.names = FALSE )
-
-####
-
-test_screening <- plant_count_biomass_tillers_NDVI_yld_quaility_2 %>% 
-  select("label"  , "Ripping factor"   , "Nutrient factor", "value", "variable", "source" )
-
-distinct(test_screening , variable)
-
-test_screening <- test_screening %>% 
-  filter(variable == "screening"|
-           variable ==   "Screenings"|
-           variable ==   "Screenings- converted (%)")
-
-str(test_screening)
-
-
-
-summary_screening <- test_screening %>% group_by(variable) %>% 
-  
-  summarise(
-    mean_value = mean(value, na.rm = TRUE),
-    sd_value = sd(value, na.rm = TRUE),
-    min_value = min(value, na.rm = TRUE),
-    max_value = max(value, na.rm = TRUE),
-    count = n()
-  )
-
-
-summary_screening <- left_join(summary_screening, source_TW)
-write.csv(summary_screening ,
-          paste0(path_name, "R_outputs/step1/", "plant_merged_screening.csv"), row.names = FALSE )
-
-
-
+# ####
+# test_protien <- plant_count_biomass_tillers_NDVI_yld_quaility_2 %>% 
+#   select("label"  , "Ripping factor"   , "Nutrient factor", "value", "variable", "source" )
+# 
+# distinct(test_protien , variable)
+# 
+# test_protien <- test_protien %>% 
+#   filter(variable == "percent_protein"|
+#            variable ==   "Protein")
+# 
+# str(test_protien)
+# 
+# 
+# 
+# summary_protien <- test_protien %>% group_by(variable) %>% 
+#   
+#   summarise(
+#     mean_value = mean(value, na.rm = TRUE),
+#     sd_value = sd(value, na.rm = TRUE),
+#     min_value = min(value, na.rm = TRUE),
+#     max_value = max(value, na.rm = TRUE),
+#     count = n()
+#   )
+# 
+# 
+# summary_protien <- left_join(summary_protien, source_TW)
+# write.csv(summary_protien ,
+#           paste0(path_name, "R_outputs/step1/", "plant_merged_protien.csv"), row.names = FALSE )
+# 
+# ####
+# 
+# test_screening <- plant_count_biomass_tillers_NDVI_yld_quaility_2 %>% 
+#   select("label"  , "Ripping factor"   , "Nutrient factor", "value", "variable", "source" )
+# 
+# distinct(test_screening , variable)
+# 
+# test_screening <- test_screening %>% 
+#   filter(variable == "screening"|
+#            variable ==   "Screenings"|
+#            variable ==   "Screenings- converted (%)")
+# 
+# str(test_screening)
+# 
+# 
+# 
+# summary_screening <- test_screening %>% group_by(variable) %>% 
+#   
+#   summarise(
+#     mean_value = mean(value, na.rm = TRUE),
+#     sd_value = sd(value, na.rm = TRUE),
+#     min_value = min(value, na.rm = TRUE),
+#     max_value = max(value, na.rm = TRUE),
+#     count = n()
+#   )
+# 
+# 
+# summary_screening <- left_join(summary_screening, source_TW)
+# write.csv(summary_screening ,
+#           paste0(path_name, "R_outputs/step1/", "plant_merged_screening.csv"), row.names = FALSE )
+# 
 
 
 
 
+
+path_name
 
 
 ## write out csv file for checking and next stage of analysis
