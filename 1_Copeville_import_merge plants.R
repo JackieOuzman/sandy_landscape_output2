@@ -41,11 +41,13 @@ excel_sheets(paste0(path_name, file))
 # "2.Copeville Pen tidy long" 
 # "2.Base soil tidy long"          
 # "2.Baseline N + Water tidy long"
-# "2.soil water tidy long"   
+# "2.soil water tidy long"  
+
 # "3.plant measure tidy long"      
 # "3.Plants Est SUBPLOT tidy long" 
 # "3.Plants Est and NDVI tidy long"
 # "3.Plant counts tidy long"       ### This looks like duplicated data I won't import 
+
 # "4.yield tidy long"  
 # "growth_stages"
 # "Copeville 2024"   
@@ -227,6 +229,10 @@ plant_bind_rows_end_serenity <- plant_bind_rows_end_serenity %>% mutate(
     variable_old == "NDVI"                               ~ "NDVI",
      .default = "opps"
 ))
+
+
+distinct(plant_bind_rows_end_serenity, variable)
+
 
 
 
