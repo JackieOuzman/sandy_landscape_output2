@@ -42,8 +42,10 @@
 # KNOWN GAPS (fix in the metadata workbook, then rerun)
 #   Walpeup: no sample_date for 2025 or 2026; 2025 crop and sowing date unknown;
 #            no harvest dates.
-#   #   Copeville: N only at the 2024 baseline (APAL); 2025 and 2026 not yet added.
-#              Extra column sample_event (baseline, pre-sow, GS31, harvest) is NA for Walpeup.
+# Wharminda: 2025 is N only (no water found), sample_date NA (lab received 5 May 2025).
+#              2024 baseline has N only; 2026 pre-sow wet/dry treated as net weights (tray = 0, to confirm).
+#   Copeville: sampling events differ by year (see sample_event); 2026 has N at all three events.
+#   sample_event (baseline, pre-sow, GS31, GS37, GS65, flowering, harvest) is NA for Walpeup.**
 #   Open decision: "<" = 0 versus 0.9.
 #
 # NOTES
@@ -59,7 +61,8 @@ library(purrr)
 
 # Site folders (one per site). Each holds "2. Soil Data and Nutrition/<year>" with the CSVs
 site_dirs <- c(Walpeup   = "H:/Output-2/Site-Data/1. SSO2_Walpeup-Pole",
-               Copeville = "H:/Output-2/Site-Data/2._SSO2_Copeville-Farley")
+               Copeville = "H:/Output-2/Site-Data/2._SSO2_Copeville-Farley",
+               Wharminda = "H:/Output-2/Site-Data/3. SSO2_Wharminda-Masters")
 
 # The metadata workbook (Sites and Site_year tabs)
 meta_file <- "H:/Output-2/Site-Data/Jackie_processing_etc/Output2_site_metadata.xlsx"
