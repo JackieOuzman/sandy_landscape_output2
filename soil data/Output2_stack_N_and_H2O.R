@@ -15,7 +15,7 @@
 #   <site folder>/2. Soil Data and Nutrition/<year>/ :
 #     <Site>_<Year>_depth_layers_N_and_H2O.csv
 #     <Site>_<Year>_depth_groups_N_and_H2O.csv
-#   Metadata workbook (Sites and Site_year tabs): Output2_site_metadata.xlsx
+# OUTPUTS (saved in the same folder as the metadata workbook: Jackie_processing_etc)
 #
 # OUTPUTS (saved next to the metadata workbook)
 #   Output2_depth_layers_N_and_H2O_stacked.csv
@@ -42,6 +42,8 @@
 # KNOWN GAPS (fix in the metadata workbook, then rerun)
 #   Walpeup: no sample_date for 2025 or 2026; 2025 crop and sowing date unknown;
 #            no harvest dates.
+#   #   Copeville: N only at the 2024 baseline (APAL); 2025 and 2026 not yet added.
+#              Extra column sample_event (baseline, pre-sow, GS31, harvest) is NA for Walpeup.
 #   Open decision: "<" = 0 versus 0.9.
 #
 # NOTES
@@ -56,10 +58,11 @@ library(stringr)
 library(purrr)
 
 # Site folders (one per site). Each holds "2. Soil Data and Nutrition/<year>" with the CSVs
-site_dirs <- c(Walpeup = "H:/Output-2/Site-Data/1. SSO2_Walpeup-Pole")
+site_dirs <- c(Walpeup   = "H:/Output-2/Site-Data/1. SSO2_Walpeup-Pole",
+               Copeville = "H:/Output-2/Site-Data/2._SSO2_Copeville-Farley")
 
 # The metadata workbook (Sites and Site_year tabs)
-meta_file <- "H:/Output-2/Site-Data/1. SSO2_Walpeup-Pole/Jackies_working/Output2_site_metadata.xlsx"
+meta_file <- "H:/Output-2/Site-Data/Jackie_processing_etc/Output2_site_metadata.xlsx"
 
 sites_to_stack <- names(site_dirs)  # add a site to site_dirs above as each one is done
 years_to_stack <- c(2024, 2025, 2026)
@@ -125,16 +128,15 @@ print(groups_all %>% count(site, year, sample_date, plot, depth_group) %>% filte
 cat("\n--- 8. Does each plot keep the same treatment across years? (should be 0 rows) ---\n")
 print(groups_all %>% distinct(site, year, plot, treatment_label) %>%
         group_by(site, plot) %>% filter(n_distinct(treatment_label) > 1) %>% arrange(plot, year))
-
 cat("\n--- 9. Plots per site-year ---\n")
 print(groups_all %>% group_by(site, year) %>% summarise(n_plots = n_distinct(plot), .groups = "drop"))
 
-cat("\n--- 10. Profile totals by site-year and depth group (compare with the single-year scripts) ---\n")
-print(groups_all %>% group_by(site, year, depth_group) %>%
+cat("\n--- 10. Profile totals by site-year, event and depth group (compare with the single-year scripts) ---\n")
+print(groups_all %>% group_by(site, year, sample_event, sample_date, depth_group) %>%
         summarise(water_mm_mean = mean(water_mm, na.rm = TRUE),
                   mineral_n_mean = mean(mineral_n_kgha, na.rm = TRUE),
                   n_na_water = sum(is.na(water_mm)), n_na_n = sum(is.na(mineral_n_kgha)),
-                  .groups = "drop"))
+                  .groups = "drop"), n = Inf)
 
 # Save the stacked files next to the metadata workbook
 out_stack <- dirname(meta_file)
