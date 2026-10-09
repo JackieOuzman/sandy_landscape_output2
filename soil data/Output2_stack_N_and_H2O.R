@@ -65,13 +65,15 @@ site_dirs <- c(Walpeup   = "H:/Output-2/Site-Data/1. SSO2_Walpeup-Pole",
                Wharminda = "H:/Output-2/Site-Data/3. SSO2_Wharminda-Masters",
                Warramboo = "H:/Output-2/Site-Data/4. SSO2_Warramboo-Sampson",
                Bute      = "H:/Output-2/Site-Data/5. SS02_Bute-Kreig",
-               Bowmans   = "H:/Output-2/Site-Data/6. SS02_Bowmans-Roberts")
+               Bowmans   = "H:/Output-2/Site-Data/6. SS02_Bowmans-Roberts",
+               Annuello = "H:/Output-2/Site-Data/7. SS02_Annuello-Aikman")
 
 # Soil data folder name inside each site folder (differs for some sites)
 soil_folders <- c(Walpeup = "2. Soil Data and Nutrition", Copeville = "2. Soil Data and Nutrition",
                   Wharminda = "2. Soil Data and Nutrition", Warramboo = "3. Soil Data and Nutrition",
                   Bute = "1.SSO2_Soil data and nutrition",
-                  Bowmans = "2. SSO2_Soildata and nutrition")
+                  Bowmans = "2. SSO2_Soildata and nutrition",
+                  Annuello = "2.SSO2_Soil Data and Nutrition")
 
 # The metadata workbook (Sites and Site_year tabs)
 meta_file <- "H:/Output-2/Site-Data/Jackie_processing_etc/Output2_site_metadata.xlsx"
@@ -156,3 +158,4 @@ out_stack <- dirname(meta_file)
 write_csv(layers_all, file.path(out_stack, "Output2_depth_layers_N_and_H2O_stacked.csv"))
 write_csv(groups_all, file.path(out_stack, "Output2_depth_groups_N_and_H2O_stacked.csv"))
 cat("\nSaved stacked files to:", out_stack, "\n")
+
